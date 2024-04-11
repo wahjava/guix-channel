@@ -1,4 +1,4 @@
-(define-module (packages emacs)
+(define-module (abbe services emacs)
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (gnu packages emacs)
