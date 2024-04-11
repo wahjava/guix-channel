@@ -5,7 +5,7 @@
   (dependencies
 
    (channel
-    (name 'guix)
+    (name guix)
     (url "https://git.savannah.gnu.org/git/guix.git")
     (branch "master")
     (commit "c1c9d6b3cdf5955f1bf5fded2a0c496ce2e631f1")
