@@ -7,6 +7,7 @@
 (define-public tmux-34
   (package
     (inherit tmux)
+    (name "tmux-34")
     (version "3.4")
     (source (origin
               (method url-fetch)
