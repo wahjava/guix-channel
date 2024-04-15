@@ -6,6 +6,8 @@
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages compression)
   #:use-module (guix download)
+  #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module ((guix licenses) :prefix license:))
 
 (define-public fossil-2-23
@@ -37,11 +39,12 @@
                 "1npnbdz5i4p61ri76vx6awggbc0q19y8b26l3sy4wxmaxkly7gwy"))))
     (build-system gnu-build-system)
     (arguments
-     '(#:phases (modify-phases %standard-phases
-                  (delete 'configure))
+     (list
+      #:phases #~(modify-phases %standard-phases
+                   (delete 'configure))
        #:tests? #f
-       #:make-flags (list "CC=gcc"
-			  (string-append "PREFIX=" (assoc-ref %outputs "out")))))
+       #:make-flags #~(list (string-append "CC=" #$(cc-for-target))
+			    (string-append "PREFIX=" (assoc-ref %outputs "out")))))
     (inputs (list ncurses zlib sqlite-next))
     (home-page "https://fnc.bsdbox.org")
     (synopsis "Interactive text-based user interface for Fossil")
