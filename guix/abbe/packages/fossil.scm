@@ -10,18 +10,18 @@
   #:use-module (guix utils)
   #:use-module ((guix licenses) :prefix license:))
 
-(define-public fossil-2-23
+(define-public fossil-2-24
   (package
     (inherit fossil)
-    (name "fossil-2-23")
-    (version "2.23")
+    (name "fossil-2-24")
+    (version "2.24")
     (source (origin
               (method url-fetch)
               (uri
 	       (string-append
-		"https://fossil-scm.org/home/tarball/47362306a7dd7c6fc3cab77cebe5d25469b0a9448479d9718eb5c49c8337b29/fossil-src-" version ".tar.gz"))
+		"https://fossil-scm.org/home/tarball/version-" version "/fossil-" version ".tar.gz"))
               (sha256
-               (base32 "1r1kabvmlhc0qgyq8g9zhq8i0123x9dba9b71j4xc71k14kfqjm9"))))
+               (base32 "0k1gjvxbvvs98yspnf7nj6rb0c7yf60savq7jywbkgimd0bkrkcm"))))
     (inputs (modify-inputs (package-inputs fossil)
 	      (delete "sqlite")
 	      (append sqlite-next)))))
