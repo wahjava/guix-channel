@@ -5,6 +5,7 @@
 (define-public kakoune-2024-05-09
   (package
    (inherit kakoune)
+   (name "kakoune-2024-05-09")
    (version "2024.05.09")
    (source
     (origin
