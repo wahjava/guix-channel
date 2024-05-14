@@ -1,5 +1,6 @@
 (define-module (abbe packages kakoune)
   #:use-module (guix download)
+  #:use-module (guix packages)
   #:use-module (gnu packages text-editors))
 
 (define-public kakoune-2024-05-09
