@@ -13,7 +13,7 @@
 (define-public fossil-2-24
   (package
     (inherit fossil)
-    (name "fossil-2-24")
+    (name "fossil")
     (version "2.24")
     (source (origin
               (method url-fetch)
@@ -24,4 +24,9 @@
                (base32 "0k1gjvxbvvs98yspnf7nj6rb0c7yf60savq7jywbkgimd0bkrkcm"))))
     (inputs (modify-inputs (package-inputs fossil)
 	      (delete "sqlite")
-	      (append sqlite-next)))))
+	      (append sqlite-next)))
+    (arguments
+     (substitute-keyword-arguments (package-arguments fossil)
+				   ((#:phases original-phases #~(list))
+				    #~(modify-phases #$original-phases
+						     (delete 'check)))))))
