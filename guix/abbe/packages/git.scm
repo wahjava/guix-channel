@@ -19,7 +19,7 @@
 			    "1w6r2liifafsxydmc48p578z7z70ys0spm6qp5ygdd0l26mxf8p6")))))
     (package
       (inherit git)
-      (name "git-2-45-1")
+      (name "git")
       (version version)
       (source (origin
 		(method url-fetch)
