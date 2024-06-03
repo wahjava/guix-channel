@@ -8,19 +8,21 @@
 (define-public ugrep-6
   (package
     (inherit ugrep)
-    (name "ugrep-6")
-    (version "6.0.0")
+    (name "ugrep")
+    (version "6.1.0")
     (source (origin
                 (method git-fetch)
                 (uri (git-reference
                       (url "https://github.com/Genivia/ugrep")
                       (commit (string-append "v" version))))
                 (sha256 (base32 
-			 "07lqjvyvda11d8xk1cmwwyx41w6l423jghcf21fnp4hrkrcsd5cd"))
+			 "01zgvwhawz1sv3sib31jgbs5q27yc4kqmhz3v9l1zbqkkhwxsvqy"))
 		(file-name (git-file-name name version))
                 (modules '((guix build utils)))
                 (snippet
                  #~(begin
 		     (delete-file-recursively "bin/win32") ; pre-built 
 		     (delete-file-recursively "bin/win64") ; pre-built executables
+		     (delete-file-recursively "bin/linux_amd64") ; pre-built
+		     (delete-file-recursively "bin/linux_arm64") ; pre-built executables
 		     ))))))
