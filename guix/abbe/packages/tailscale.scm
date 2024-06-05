@@ -30,18 +30,18 @@
    (version "1.66.4")
    (source (origin
             (method url-fetch/tarbomb)
-            (uri (tailscale-url version (%current-system))
-                 (sha256 (base32 (tailscale-hash (%current-system)))))
-            (build-system copy-build-system)
-            (arguments
-             (list
-              #:install-plan
-              #~`((,(string-append "tailscale_" #$version "_" (tailscale-arch (%current-system)) "/") "bin/"))))
-            (propagated-inputs
+            (uri (tailscale-url version (%current-system)))
+            (sha256 (base32 (tailscale-hash (%current-system))))))
+   (build-system copy-build-system)
+   (arguments
+    (list
+     #:install-plan
+     #~`((,(string-append "tailscale_" #$version "_" (tailscale-arch (%current-system)) "/") "bin/"))))
+   (propagated-inputs
                                         ; iptables is required for setting up routing
-             (list iptables))
-            (synopsis "Tailscale connects your team's devices and development environments for easy access to remote resources.")
-            (description
-             "Tailscale is a zero config VPN for building secure networks. Install on any device in minutes. Remote access from any network or physical location.")
-            (home-page "https://tailscale.com/")
-            (license #f)))))
+    (list iptables))
+   (synopsis "Tailscale connects your team's devices and development environments for easy access to remote resources.")
+   (description
+    "Tailscale is a zero config VPN for building secure networks. Install on any device in minutes. Remote access from any network or physical location.")
+   (home-page "https://tailscale.com/")
+   (license #f))))
