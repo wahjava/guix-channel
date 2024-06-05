@@ -12,33 +12,40 @@
 (define helix-version "24.03")
 (define helix-base-dir ".")
 
+(define (helix-hash)
+  (match (%current-system)
+    ("aarch64-linux" "14nlz3yxjf27xd7rr42iapk99y1z3bh0cjlfn70ac3hz1kzfkany")
+    ("x86_64-linux" "1z4v6wwcmbhqpwj6590860m6cx2f5a6402khpix91x7dgy090lmi")))
+
 (define-public helix-editor
   (package
-   (name "helix-editor")
-   (version helix-version)
-   (source (origin
-            (method url-fetch)
-            (uri (string-append
-		  "https://github.com/helix-editor/helix/releases/download/"
-		  version
-		  "/helix-"
-		  version
-		  "-aarch64-linux.tar.xz"))
-	    (sha256 (base32 "14nlz3yxjf27xd7rr42iapk99y1z3bh0cjlfn70ac3hz1kzfkany"))))
-   (build-system binary-build-system)
-   (arguments
-    `(#:patchelf-plan
-      `(("hx" ("glibc" "gcc")))
-      #:install-plan
-      ,#~(list
-	  (list (string-append #$helix-base-dir "/hx") "bin/hx")
-	  (list (string-append #$helix-base-dir "/runtime") "share/helix/")
-	  (list (string-append #$helix-base-dir "/contrib") "share/helix/"))))
-   (inputs
-    (list
-     glibc
-     `(,gcc "lib")))
-   (synopsis "Helix is an editor")
-   (description "Helix is an editor")
-   (home-page "https://helix-editor.com/")
-   (license mpl2.0)))
+    (name "helix-editor")
+    (version helix-version)
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+		    "https://github.com/helix-editor/helix/releases/download/"
+		    version
+		    "/helix-"
+		    version
+		    "-"
+		    (%current-system)
+		    ".tar.xz"))
+	      (sha256 (base32 (helix-hash)))))
+    (build-system binary-build-system)
+    (arguments
+     `(#:patchelf-plan
+       `(("hx" ("glibc" "gcc")))
+       #:install-plan
+       ,#~(list
+	   (list (string-append #$helix-base-dir "/hx") "bin/hx")
+	   (list (string-append #$helix-base-dir "/runtime") "share/helix/")
+	   (list (string-append #$helix-base-dir "/contrib") "share/helix/"))))
+    (inputs
+     (list
+      glibc
+      `(,gcc "lib")))
+    (synopsis "Helix is an editor")
+    (description "Helix is an editor")
+    (home-page "https://helix-editor.com/")
+    (license mpl2.0)))
