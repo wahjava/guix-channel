@@ -36,7 +36,7 @@
    (arguments
     (list
      #:install-plan
-     #~`((,(string-append "tailscale_" #$version "_" (tailscale-arch (%current-system)) "/") "bin/"))))
+     #~`((,(string-append "tailscale_" #$version "_" #$(tailscale-arch (%current-system)) "/") "bin/"))))
    (propagated-inputs
                                         ; iptables is required for setting up routing
     (list iptables))
