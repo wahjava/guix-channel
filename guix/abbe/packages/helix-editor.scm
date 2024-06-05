@@ -7,6 +7,7 @@
   #:use-module (guix gexp)
   #:use-module (nonguix build-system binary)
   #:use-module (guix download)
+  #:use-module (ice-9 match)
   #:use-module (guix licenses))
 
 (define helix-version "24.03")
