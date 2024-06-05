@@ -5,6 +5,7 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages compression)
   #:use-module (guix gexp)
+  #:use-module (guix utils)
   #:use-module (nonguix build-system binary)
   #:use-module (guix download)
   #:use-module (ice-9 match)
