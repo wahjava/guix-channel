@@ -4,7 +4,7 @@
   #:use-module (guix gexp)
   #:use-module (guix build-system copy)
   #:use-module (guix download)
-  #:use-module (guix licenses)
+  #:use-module ((guix licenses) :prefix license:)
   #:use-module (ice-9 match))
 
 (define (tailscale-arch system)
@@ -44,4 +44,4 @@
    (description
     "Tailscale is a zero config VPN for building secure networks. Install on any device in minutes. Remote access from any network or physical location.")
    (home-page "https://tailscale.com/")
-   (license #f)))
+   (license license:bsd-3)))
