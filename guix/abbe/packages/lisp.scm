@@ -1,22 +1,49 @@
 (define-module (abbe packages lisp)
   #:use-module (guix download)
   #:use-module (guix packages)
-  #:use-module (gnu packages lisp))
+  #:use-module (guix utils)
+  #:use-module (guix gexp)
+  #:use-module (gnu packages lisp)
+  #:use-module (guix build utils))
 
-(define-public sbcl243
+(define-public sbcl245
   (package
    (inherit sbcl)
-   (name "sbcl-243")
-   (version "2.4.3")
+   (name "sbcl")
+   (version "2.4.5")
    (source
     (origin
      (method url-fetch)
      (uri (string-append "mirror://sourceforge/sbcl/sbcl/" version "/sbcl-"
                          version "-source.tar.bz2"))
      (sha256
-      (base32 "1wn3nwq3qn33r6pxr57kwjhdx4w80f51akrx9b3x6amqjbgsmjc9"))
+      (base32 "1lbvb9rzlkl3h8s75i2js4dnmgxmvs41jxjb5dj0f603r688xxjd"))
      (modules '((guix build utils)))
      (snippet '(begin
                  ;; Don't force ARMv5.
                  (substitute* "src/runtime/Config.arm-linux"
-                              (("-march=armv5t") ""))))))))
+                              (("-march=armv5t") ""))))))
+   (native-inputs
+    (modify-inputs (package-native-inputs sbcl)
+                   (delete "clisp")
+                   (prepend sbcl)))
+   (arguments
+    (substitute-keyword-arguments
+     (package-arguments sbcl)
+     ((#:phases phases)
+      #~(modify-phases #$phases
+                       (replace 'build
+                                (lambda* (#:key outputs #:allow-other-keys)
+                                         (setenv "CC" "gcc")
+                                         (invoke "sh" "make.sh" "sbcl"
+                                                 (string-append "--prefix=" (assoc-ref outputs "out"))
+                                                 "--dynamic-space-size=3072"
+                                                 "--with-sb-core-compression"
+                                                 "--with-sb-xref-for-internals"
+                                                 "--with-sb-simd")))))))))
+
+;; Local Variables:
+;; mode: scheme
+;; tab-width: 2
+;; indent-tabs-mode: nil
+;; End:
