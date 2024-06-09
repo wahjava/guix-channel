@@ -2,6 +2,7 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix gexp)
+  #:use-module (guix records)
   #:use-module (gnu home services)
   #:use-module (gnu home services xdg)
   #:use-module (gnu services)
