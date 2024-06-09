@@ -6,11 +6,11 @@
   #:use-module (guix utils)
   #:use-module ((guix licenses) :prefix license:))
 
-(define-public mold-2-31
+(define-public mold-2-32
   (package
     (inherit mold)
     (name "mold")
-    (version "2.31.0")
+    (version "2.32.0")
     (source
      (origin
        (method git-fetch)
@@ -19,7 +19,7 @@
              (commit (string-append "v" version))))
        (file-name (git-file-name name version))
        (sha256
-        (base32 "1fs277z5wbjlz31nvbzihv8p84alk8iap50wpf1ffcq2h3aj8hh9"))
+        (base32 "1wl7mp7r5hxmvfpmrq32ffjpgn8z8pk775y423nr56gvrb39vj6i"))
        (modules '((guix build utils)))
        (snippet
         #~(begin
