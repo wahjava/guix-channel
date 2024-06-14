@@ -59,6 +59,7 @@
         ("gmp-clearkey/0.1/libclearkey.so" ( "out" "gcc")))
       #:install-plan
       `(("firefox" "bin/")
+	("firefox-bin" "bin/")
         ("./" "lib/"))))
    (inputs (list glibc `(,gcc "lib") gtk+ cairo pango libxcb libx11 libxext at-spi2-core
                  glib dbus freetype libxrandr libxdamage libxfixes libxcursor alsa-lib
