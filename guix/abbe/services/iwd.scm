@@ -44,7 +44,7 @@
                                 ":" (string-append #$coreutils "/bin")))))
       (list (shepherd-service
              (documentation "Run Iwd")
-             (provision '(iwd networking))
+             (provision '(iwd))
              (requirement '(user-processes dbus-system loopback))
              (start #~(make-forkexec-constructor
                        (list (string-append #$iwd "/libexec/iwd"))
