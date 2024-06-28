@@ -37,21 +37,22 @@
     (native-inputs
      (list pkg-config perl))
     (arguments
-     (list
-      ;; disable runpath validation, courtesy: libbsd's special
-      ;; treatment of libmd
-      #:validate-runpath? #f
-      #:configure-flags '(list "CFLAGS=-DGOT_DIAL_PATH_SSH=\\\"ssh\\\" -DGOT_TAG_PATH_SSH_KEYGEN=\\\"ssh-keygen\\\"")
-      #:phases #~(modify-phases %standard-phases
-                   (add-after 'unpack 'patch-execv-to-execvp
-                     (lambda _
-                       (substitute* "lib/dial.c"
-                         (("execv\\(GOT_DIAL_") "execvp(GOT_DIAL_")
-                         (("execv %s\", GOT_DIAL") "execvp %s\", GOT_DIAL"))
-                       (substitute* "lib/sigs.c"
-                         (("execv\\(GOT_TAG") "execvp(GOT_TAG")
-                         (("execv %s\", GOT_TAG") "execvp %s\", GOT_TAG"))
-                       #t)))))
+     `(;; disable runpath validation, courtesy: libbsd's special
+       ;; treatment of libmd
+       #:validate-runpath? #f
+       #:configure-flags
+       '("CFLAGS=-DGOT_DIAL_PATH_SSH=\\\"ssh\\\" -DGOT_TAG_PATH_SSH_KEYGEN=\\\"ssh-keygen\\\" -DGOT_TAG_PATH_SIGNIFY=\\\"signify\\\"")
+      #:phases ,#~(modify-phases %standard-phases
+                    (add-after 'unpack 'patch-execv-to-execvp
+                      (lambda _
+                        ;; got sources has paths hardcoded to /usr/bin
+                        (substitute* "lib/dial.c"
+                          (("execv\\(GOT_DIAL_") "execvp(GOT_DIAL_")
+                          (("execv %s\", GOT_DIAL") "execvp %s\", GOT_DIAL"))
+                        (substitute* "lib/sigs.c"
+                          (("execv\\(GOT_TAG") "execvp(GOT_TAG")
+                          (("execv %s\", GOT_TAG") "execvp %s\", GOT_TAG"))
+                        #t)))))
     (build-system gnu-build-system)
     (synopsis "Distributed version control system")
     (description
