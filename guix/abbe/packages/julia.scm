@@ -13,7 +13,7 @@
     ((v1 v2 v3)
      (string-append v1 "." v2))))
 
-(define-public julia
+(define-public julia-bin
   (package
    (name "julia")
    (version "1.10.4")
