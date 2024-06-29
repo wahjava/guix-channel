@@ -7,7 +7,7 @@
   #:use-module (guix download)
   #:use-module (guix licenses))
 
-(define-public aerc
+(define-public aerc-bin
   (package
     (name "aerc")
     (version "0.17.0")
