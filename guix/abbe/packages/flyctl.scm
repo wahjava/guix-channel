@@ -19,13 +19,13 @@
 
 (define (flyctl-hash system)
   (match system
-    ("aarch64-linux" "1qncnk6cv001xly9h5akvaivqz9aprqakc57r9v5x945xwh5li59")
-    ("x86_64-linux" "0a14cdff3xmcyq111l9zla8hdsxrh22izixzd8gm4wk1xhf1wqa1")))
+    ("aarch64-linux" "0j91409ggm8vpwpb407vivz3plkbrid8gmmha2i02ikglyxkpws2")
+    ("x86_64-linux" "1s01jgwa2pmcx7315scjlkm9lwqzlawc2a2hgs6gz8azxg1pd04b")))
 
 (define-public flyctl
   (package
    (name "flyctl")
-   (version "0.2.65")
+   (version "0.2.72")
    (source (origin
             (method url-fetch/tarbomb)
             (uri (flyctl-url version (%current-system)))
