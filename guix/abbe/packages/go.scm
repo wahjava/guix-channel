@@ -7,8 +7,8 @@
 
 (define (go-hash)
   (match (%current-system)
-    ("aarch64-linux" "0wg7z71f189z1qbs7v27ha7kxsi75rba7b1022va3r6jak1pgqd8")
-    ("x86_64-linux" "0zfypbkqbnsr66ghjaww0hg6b2j1raf265il4yb52mq2c59d8yds")))
+    ("aarch64-linux" "0nibchqlxr16r10m1pxbbx9p3bfrscwilz2jc0vbwcglzidk48cd")
+    ("x86_64-linux" "1w67wkk0jl780z2ricf9v0dl9sljn4sk5ijva63a1bjy8d6r4jwh")))
 
 (define (go-file-suffix)
   (match (%current-system)
@@ -18,7 +18,7 @@
 (define-public go-122
   (package
    (name "go")
-   (version "1.22.4")
+   (version "1.22.5")
    (source (origin
             (method url-fetch)
             (uri (string-append "https://go.dev/dl/go" version "." (go-file-suffix) ".tar.gz"))
