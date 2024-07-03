@@ -30,17 +30,19 @@
 				    '("cache" "custom""lib" "log" "plugins"
 				      "templates" "themes""tools"))))))))
 
+(define %powerlevel-10k-rev "2b7da93df04acd04d84f5de827e5b14077839a4b")
+
 (define-public powerlevel-10k
   (package
    (name "powerlevel-10k")
-   (version "1.20.0")
+   (version "1.20.0-20240701")
    (source
     (origin (method git-fetch)
             (uri (git-reference
                   (url "https://github.com/romkatv/powerlevel10k")
-                  (commit (string-append "v" version))))
+                  (commit %powerlevel-10k-rev)))
             (file-name (git-file-name name version))
-            (sha256 (base32 "1ha7qb601mk97lxvcj9dmbypwx7z5v0b7mkqahzsq073f4jnybhi"))))
+            (sha256 (base32 "06qx1dq3vgp5ly8k425ai10axrx2g2abfq52chcm61y1nb2dcclg"))))
    (build-system copy-build-system)
    (home-page "https://github.com/romkatv/powerlevel10k/")
    (synopsis "Powerlevel 10K zsh prompt framework")
