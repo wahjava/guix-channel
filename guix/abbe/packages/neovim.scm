@@ -1,8 +1,13 @@
 (define-module (abbe packages neovim)
   #:use-module (guix git-download)
+  #:use-module (guix download)
   #:use-module (guix packages)
   #:use-module (guix gexp)
+  #:use-module (guix base16)
   #:use-module (gnu packages vim)
+  #:use-module (nonguix build-system binary)
+  #:use-module (gnu packages gcc)
+  #:use-module (gnu packages base)
   #:use-module (gnu packages tree-sitter))
 
 (define-public tree-sitter-0-22-6
@@ -41,3 +46,21 @@
     (inputs (modify-inputs (package-inputs neovim)
 	      (replace "tree-sitter" tree-sitter-0-22-6)))))
 
+(define-public neovim-bin
+  (package
+    (inherit neovim)
+    (version "0.10.0")
+    (build-system binary-build-system)
+    (arguments
+     `(#:patchelf-plan
+       `(("bin/nvim" ("glibc" "gcc")))))
+    (inputs
+     (list
+      glibc
+      `(,gcc "lib")))
+    (native-inputs '())
+    (source (origin
+	      (method url-fetch)
+	      (uri (string-append
+		     "https://github.com/neovim/neovim/releases/download/v" version "/nvim-linux64.tar.gz"))
+	      (sha256 (base16-string->bytevector "be1f0988d0de71c375982b87b86cd28d2bab35ece8285abe3b0aac57604dfc5a"))))))
