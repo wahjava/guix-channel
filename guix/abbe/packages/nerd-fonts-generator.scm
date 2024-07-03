@@ -64,13 +64,6 @@ Octicons, and others.")
     ((hash "" file-name)
      (cons (car (string-split file-name #\.)) hash))))
 
-(define sha256-txt-out
-  (let* ((store (open-connection))
-         (drv (run-with-store store (origin->derivation sha256-txt)))
-         (output (derivation->output-path drv)))
-    (build-derivations store (list drv))
-    output))
-
 (define (generate-fonts hash-file-name)
 
   (let ((lines (filter (lambda (h) (string-suffix? ".tar.xz" h))
@@ -83,6 +76,12 @@ Octicons, and others.")
          (map pkg-hash lines))))
 
 (define (generate-nerd-fonts out-file)
+  (define sha256-txt-out
+    (let* ((store (open-connection))
+           (drv (run-with-store store (origin->derivation sha256-txt)))
+           (output (derivation->output-path drv)))
+      (build-derivations store (list drv))
+      output))
   (call-with-output-file 
       out-file
     (lambda (out)
