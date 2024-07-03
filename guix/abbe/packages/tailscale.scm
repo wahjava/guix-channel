@@ -20,14 +20,14 @@
 
 (define (tailscale-hash system)
   (match system
-    ("aarch64-linux" "0d8asxrhy5dywjvh374xdgah00g9vjmycgh8agw6412f89yrjk6j")
-    ("x86_64-linux" "1qrprimabssr1y5bgsxhkhhnc1g1jdfv9spzxvbbrgs1gh3c7v8q")
-    ("i686-linux" "0jwkj1nmia2wciyib8fhgv5qjjysmhhlkyy3vqy7j2a8mj1pw21z")))
+    ("aarch64-linux" "1xq1l4l1a2fw3s774xbgji6mnhghd8k0ld7yjj44ysy1n3jyjm41")
+    ("x86_64-linux" "1lmnssdpaznxqgkm943v0fg6njjbjr7z9ajzm3whd4l0jx41ln9v")
+    ("i686-linux" "0ghnrk79cvyv448l8f438harqpf17xxfdp3x6xw0ywnha1iwn5ml")))
 
 (define-public tailscale
   (package
    (name "tailscale")
-   (version "1.68.1")
+   (version "1.68.2")
    (source (origin
             (method url-fetch/tarbomb)
             (uri (tailscale-url version (%current-system)))
