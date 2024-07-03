@@ -52,7 +52,7 @@
    (arguments (list #:install-plan
                     #~(map (lambda (d)
                              (list d
-                                   "share/zsh/plugins/powerlevel-10k/"))
+                                   "share/zsh/plugins/powerlevel10k/"))
                            (list "config"
                                  "gitstatus"
                                  "internal"
