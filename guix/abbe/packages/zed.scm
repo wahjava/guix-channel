@@ -9,6 +9,8 @@
   #:use-module (nonguix build-system binary)
   #:use-module (guix download)
   #:use-module (ice-9 match)
+  #:use-module (gnu packages freedesktop)
+  #:use-module (gnu packages vulkan)
   #:use-module (guix licenses))
 
 (define zed-version "0.143.6")
@@ -40,7 +42,7 @@
    (arguments
     `(#:patchelf-plan
       `(("bin/zed" ("glibc" "gcc"))
-        ("libexec/zed-editor" ("out" "gcc" "glibc"))
+        ("libexec/zed-editor" ("out" "vulkan-loader" "wayland" "gcc" "glibc"))
         ("lib/libXdmcp.so.6" ("out"))
         ("lib/libssl.so.1.1" ("out"))
         ("lib/libxcb.so.1" ("out"))
@@ -49,7 +51,7 @@
         ("lib/libasound.so.2" ("glibc")))))
    (inputs
     (list
-     glibc
+     glibc wayland vulkan-loader
      `(,gcc "lib")))
    (synopsis "zed is an editor")
    (description "zed is an editor")
