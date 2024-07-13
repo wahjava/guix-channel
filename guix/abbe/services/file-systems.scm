@@ -271,7 +271,8 @@ FILE-SYSTEM."
                   (chdir "/")
                   (invoke #$zfs "unmount" "-a" "-f")))))
 
-    `(,device-mapping-zvol/*
+    `(,zfs-scan
+      ,device-mapping-zvol/*
       ,@(if (zfs-configuration-auto-mount? conf)
             `(,zfs-auto-mount)
             '()))))
