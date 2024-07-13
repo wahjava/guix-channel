@@ -23,6 +23,7 @@
   #:use-module (gnu services linux)
   #:use-module (gnu services mcron)
   #:use-module (gnu services shepherd)
+  #:use-module ((gnu system file-systems) #:select (file-system-mount-point))
   #:use-module (gnu system mapped-devices)
   #:use-module (guix gexp)
   #:use-module (guix modules)
@@ -43,6 +44,25 @@
             zfs-configuration-auto-snapshot-keep
 
             %zfs-zvol-dependency))
+
+(define (file-system->shepherd-service-name file-system)
+  "Return the symbol that denotes the service mounting and unmounting
+FILE-SYSTEM."
+  (symbol-append 'file-system-
+                 (string->symbol (file-system-mount-point file-system))))
+
+(define (mapped-device->shepherd-service-name md)
+  "Return the symbol that denotes the shepherd service of MD, a <mapped-device>."
+  (symbol-append 'device-mapping-
+                 (string->symbol (string-join
+                                  (mapped-device-targets md) "-"))))
+
+(define dependency->shepherd-service-name
+  (match-lambda
+    ((? mapped-device? md)
+     (mapped-device->shepherd-service-name md))
+    ((? file-system? fs)
+     (file-system->shepherd-service-name fs))))
 
 (define-record-type* <zfs-configuration>
   zfs-configuration
