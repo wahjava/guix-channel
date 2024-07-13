@@ -364,12 +364,12 @@ FILE-SYSTEM."
                                (const '("zfs")))
             ;; Make sure ZFS pools and datasets are mounted at
             ;; boot.
-            (service-extension shepherd-root-service-type
-                               zfs-shepherd-services)
+            ;; (service-extension shepherd-root-service-type
+            ;;                   zfs-shepherd-services)
             ;; Make sure user-processes don't start until
             ;; after ZFS does.
-            (service-extension user-processes-service-type
-                               zfs-user-processes)
+            ;; (service-extension user-processes-service-type
+            ;;                   zfs-user-processes)
             ;; Install automated scrubbing and snapshotting.
             (service-extension mcron-service-type
                                zfs-mcron-jobs)
