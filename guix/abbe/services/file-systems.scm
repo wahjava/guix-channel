@@ -284,7 +284,7 @@ FILE-SYSTEM."
   the device scan."
   (if (zfs-configuration-auto-mount? conf)
       '(zfs-auto-mount)
-      '(zfs-scan)))
+      '()))
 
 (define (zfs-mcron-auto-snapshot-jobs conf)
   "Creates a list of mcron jobs for auto-snapshotting, one for each
