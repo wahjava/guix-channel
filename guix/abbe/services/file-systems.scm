@@ -30,6 +30,7 @@
   #:use-module (guix packages)
   #:use-module (guix records)
   #:use-module (srfi srfi-1)
+  #:use-module (ice-9 match)
   #:export (zfs-service-type
 
             zfs-configuration
