@@ -11,13 +11,13 @@
   #:use-module (ice-9 match)
   #:use-module (guix licenses))
 
-(define helix-version "24.03")
+(define helix-version "24.07")
 (define helix-base-dir ".")
 
 (define (helix-hash)
   (match (%current-system)
-    ("aarch64-linux" "14nlz3yxjf27xd7rr42iapk99y1z3bh0cjlfn70ac3hz1kzfkany")
-    ("x86_64-linux" "1z4v6wwcmbhqpwj6590860m6cx2f5a6402khpix91x7dgy090lmi")))
+    ("aarch64-linux" "0pca65dkxfcvg5ssfzwi7gkhjb1jgmwqs5lj4hxsz0zzajgdznpf")
+    ("x86_64-linux" "0p5a23z094233qzfh9ixdkgmgsyivjzpbds1s780w269j1320n62")))
 
 (define-public helix-editor
   (package
