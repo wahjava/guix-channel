@@ -4,6 +4,7 @@
   #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (guix build-system gnu)
+  #:use-module (guix build-system copy)
   #:use-module (guix base16)
   #:use-module (gnu packages base)
   #:use-module (gnu packages bootstrap)
@@ -79,4 +80,28 @@
     (synopsis "Glassgow Haskell Compiler")
     (description "The Glasgow Haskell Compiler (GHC) is a state-of-the-art compiler and interactive environment for the functional language Haskell.")
     (home-page "https://www.haskell.org/ghc")
+    (license license:bsd-3)))
+
+(define-public cabal-install
+  (package
+    (name "cabal-install")
+    (version "3.10.1.0")
+    (source (origin
+              (method url-fetch)
+              (uri (string-append
+                     "https://downloads.haskell.org/~cabal/cabal-install-"
+                     version
+                     "/cabal-install-"
+                     version
+                     "-"
+                     (%current-system)
+                     "-alpine.tar.xz"))
+             (sha256 (base32 "16fx3hg5fz2lx5adz25b0jkqhilf3jd4c7hjx9x69n4vwvba6zqq"))))
+    (build-system copy-build-system)
+    (arguments
+      (list #:install-plan
+	    ''(("cabal" "bin/"))))
+    (synopsis "cabal-install tool")
+    (description "cabal-install tool")
+    (home-page "https://www.haskell.org/cabal/")
     (license license:bsd-3)))
