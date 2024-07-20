@@ -21,10 +21,20 @@
     ("aarch64-linux" "https://downloads.haskell.org/~ghc/9.6.6/ghc-9.6.6-aarch64-deb10-linux.tar.xz")
     ("x86_64-linux" "https://downloads.haskell.org/~ghc/9.6.6/ghc-9.6.6-x86_64-deb11-linux.tar.xz")))
 
+(define (stack-bindist-url)
+  (match (%current-system)
+    ("x86_64-linux" "https://github.com/commercialhaskell/stack/releases/download/v2.15.7/stack-2.15.7-linux-x86_64.tar.gz")
+    ("aarch64-linux" "https://github.com/commercialhaskell/stack/releases/download/v2.15.7/stack-2.15.7-linux-aarch64.tar.gz")))
+
 (define (ghc-bindist-sha256)
   (match (%current-system)
     ("aarch64-linux" "58d5ce65758ec5179b448e4e1a2f835924b4ada96cf56af80d011bed87d91fef")
     ("x86_64-linux" "a34bdfc1f65b000135d9c8eb12d69670026a64043a8b33ef5ba24b0f8e28d046")))
+
+(define (stack-bindist-sha256)
+  (match (%current-system)
+    ("aarch64-linux" "f0c4b038c7e895902e133a2f4c4c217e03c4be44aa5da48aec9f7947f4af090b")
+    ("x86_64-linux" "4e635d6168f7578a5694a0d473c980c3c7ed35d971acae969de1fd48ef14e030")))
 
 (define-public ghc
   (package
@@ -104,4 +114,22 @@
     (synopsis "cabal-install tool")
     (description "cabal-install tool")
     (home-page "https://www.haskell.org/cabal/")
+    (license license:bsd-3)))
+
+(define-public stack
+  (package
+    (name "stack")
+    (version "2.15.7")
+    (source (origin
+              (method url-fetch)
+              (uri (stack-bindist-url))
+              (sha256 (base16-string->bytevector (stack-bindist-sha256)))))
+    (build-system copy-build-system)
+    (arguments
+      (list #:install-plan
+	    ''(("stack" "bin/")
+	       ("doc" "share/doc/stack"))))
+    (synopsis "stack tool")
+    (description "stack tool")
+    (home-page "https://haskellstack.org/")
     (license license:bsd-3)))
