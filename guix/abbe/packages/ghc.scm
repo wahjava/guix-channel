@@ -60,23 +60,19 @@
                        (libdir (string-append "lib/" system "-ghc-9.6.6"))
                        (out-lib (string-append out "/lib/ghc-9.6.6/" libdir ))
                        (ld-so (search-input-file inputs #$(glibc-dynamic-linker)))
-                       (rpath (string-join (list gmp-lib out-lib ncurses-lib) ":"))
+                       (rpath (string-join (list gmp-lib out-lib ncurses-lib
+                                                 (dirname ld-so)) ":"))
                        (libs (find-files libdir "libHS.+\\.so")))
                   (for-each (lambda (file)
-                              (display (string-append "Patching: " file "\n"))
                               (invoke "patchelf" "--set-interpreter" ld-so
                                       "--set-rpath" rpath
-                                      file)
-                              (invoke "patchelf" "--print-interpreter" "--print-rpath" file)
-                              (invoke "ls" "-la" file))
+                                      file))
                             (append binaries '
                                     ("lib/bin/ghc-iserv"
                                      "lib/bin/ghc-iserv-prof"
                                      "lib/bin/ghc-iserv-dyn")))
                   (for-each (lambda (file)
-                              (display (string-append "Patching: " file "\n"))
-                              (invoke "patchelf" "--set-rpath" rpath file)
-                              (invoke "patchelf" "--print-rpath" file))
+                              (invoke "patchelf" "--set-rpath" rpath file))
                             libs))))
             (delete 'build)
             (delete 'check))))
