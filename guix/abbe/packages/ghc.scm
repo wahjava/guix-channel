@@ -9,6 +9,7 @@
   #:use-module (gnu packages base)
   #:use-module (gnu packages bootstrap)
   #:use-module (gnu packages commencement)
+  #:use-module (gnu packages compression)
   #:use-module (gnu packages elf)
   #:use-module (gnu packages llvm)
   #:use-module (gnu packages multiprecision)
@@ -35,6 +36,16 @@
   (match (%current-system)
     ("aarch64-linux" "f0c4b038c7e895902e133a2f4c4c217e03c4be44aa5da48aec9f7947f4af090b")
     ("x86_64-linux" "4e635d6168f7578a5694a0d473c980c3c7ed35d971acae969de1fd48ef14e030")))
+
+(define (hls-bindist-url)
+  (match (%current-system)
+    ("x86_64-linux" "https://downloads.haskell.org/~hls/haskell-language-server-2.9.0.1/haskell-language-server-2.9.0.1-x86_64-linux-unknown.tar.xz")
+    ("aarch64-linux" "https://downloads.haskell.org/~hls/haskell-language-server-2.9.0.1/haskell-language-server-2.9.0.1-aarch64-linux-ubuntu20.tar.xz")))
+
+(define (hls-bindist-sha256)
+  (match (%current-system)
+    ("x86_64-linux" "025xhk2vp4z0ad94yzbbv80m5njp71sxwpbwickwzmjlc95yyb5n")
+    ("aarch64-linux" "1d0nxzs9lil1fjcxkhdfki474xzv2f5z4y539c8i35a97lrddjs2")))
 
 (define-public ghc
   (package
@@ -133,3 +144,52 @@
     (description "stack tool")
     (home-page "https://haskellstack.org/")
     (license license:bsd-3)))
+
+(define-public haskell-language-server
+  (package
+    (name "haskell-language-server")
+    (version "2.9.0.1")
+    (source (origin
+              (method url-fetch)
+              (uri (hls-bindist-url))
+              (sha256 (base32 (hls-bindist-sha256)))))
+    (build-system gnu-build-system)
+    (inputs (list gmp glibc zlib))
+    (native-inputs (list patchelf))
+    (arguments
+     (list
+      #:strip-binaries? #f
+      #:validate-runpath? #f
+      #:make-flags
+      '(list (string-append "PREFIX=" %output))
+      #:phases
+      #~(modify-phases %standard-phases
+          (delete 'configure)
+          (delete 'build)
+          (delete 'check)
+          (add-before 'install 'patchelf-binaries
+            (lambda* (#:key inputs outputs #:allow-other-keys)
+              (let* ((rpath (string-join (map (lambda (input)
+                                                (string-append (assoc-ref inputs input) "/lib"))
+                                              '("glibc" "gmp" "zlib"))
+                                         ":"))
+                     (ld-so (search-input-file inputs #$(glibc-dynamic-linker)))
+                     (out (assoc-ref outputs "out"))
+                     (hls-prefix-length (string-length "bin/haskell-language-server-")))
+                (for-each (lambda (file)
+                            (let ((hls-ver (substring file hls-prefix-length)))
+                              (invoke "patchelf"
+                                      "--set-rpath"
+                                      (if (string-ci=? "wrapper" hls-ver)
+                                          rpath
+                                          (string-append rpath ":"
+                                                         out "/lib/haskell-language-server-2.9.0.1/lib/"
+                                                         hls-ver))
+                                      "--set-interpreter"
+                                      ld-so
+                                      file)))
+                          (find-files "bin" "^haskell-language-server-.*$"))))))))
+    (synopsis "Haskell Language Server Implementation")
+    (description "Haskell LSP")
+    (home-page "https://github.com/haskell/haskell-language-server")
+    (license license:asl2.0)))
