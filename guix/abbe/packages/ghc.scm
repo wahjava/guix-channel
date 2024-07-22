@@ -57,7 +57,7 @@
              (sha256 (base16-string->bytevector (ghc-bindist-sha256)))))
     (build-system gnu-build-system)
     (inputs (list gmp glibc ncurses/tinfo))
-    (propagated-inputs (list gmp ncurses/tinfo))
+    (propagated-inputs (list gmp ncurses/tinfo binutils-gold))
     (native-inputs (list binutils-gold gcc-toolchain llvm gnu-make patchelf))
     (arguments
      `(#:configure-flags
