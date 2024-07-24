@@ -6,6 +6,7 @@
          #:use-module (guix records)
          #:use-module (guix gexp)
          #:use-module (ice-9 match)
+         #:use-module (gnu packages base)
          #:use-module (gnu packages linux)
          #:export (sshguard-service-type sshguard-configuration))
 
