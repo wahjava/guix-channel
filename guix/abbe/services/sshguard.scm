@@ -61,11 +61,11 @@
         (requirement '(networking)) ;; services this depends on
         (start #~(make-forkexec-constructor
                   (cons #$(file-append sshguard "/sbin/sshguard")
-                        (append whitelist
-                                blacklist-threshold
-                                blacklist-file
-                                block-time
-                                detection-time
+                        (append #$whitelist
+                                #$blacklist-threshold
+                                #$blacklist-file
+                                #$block-time
+                                #$detection-time
                                 '("/var/log/secure")))
                   #:environment-variables #$environment))
         (stop #~(make-kill-destructor))))))
