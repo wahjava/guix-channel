@@ -47,7 +47,7 @@
     ("x86_64-linux" "025xhk2vp4z0ad94yzbbv80m5njp71sxwpbwickwzmjlc95yyb5n")
     ("aarch64-linux" "1d0nxzs9lil1fjcxkhdfki474xzv2f5z4y539c8i35a97lrddjs2")))
 
-(define-public ghc
+(define-public ghc-bin
   (package
     (name "ghc")
     (version "9.6.6")
@@ -104,7 +104,7 @@
     (home-page "https://www.haskell.org/ghc")
     (license license:bsd-3)))
 
-(define-public cabal-install
+(define-public cabal-install-bin
   (package
     (name "cabal-install")
     (version "3.10.1.0")
@@ -128,7 +128,7 @@
     (home-page "https://www.haskell.org/cabal/")
     (license license:bsd-3)))
 
-(define-public stack
+(define-public stack-bin
   (package
     (name "stack")
     (version "2.15.7")
@@ -146,7 +146,7 @@
     (home-page "https://haskellstack.org/")
     (license license:bsd-3)))
 
-(define-public haskell-language-server
+(define-public haskell-language-server-bin
   (package
     (name "haskell-language-server")
     (version "2.9.0.1")
