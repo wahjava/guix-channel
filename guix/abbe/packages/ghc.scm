@@ -81,7 +81,7 @@
                        (ncurses-lib (string-append ncurses "/lib"))
                        (out (assoc-ref outputs "out"))
                        (libdir (string-append "lib/" system "-ghc-9.6.6"))
-                       (out-lib (string-append out "/lib/ghc-9.6.6/" libdir ))
+                       (out-lib (string-append out "/lib/ghc-9.6.6/" libdir))
                        (ld-so (search-input-file inputs #$(glibc-dynamic-linker)))
                        (rpath (string-join (list gmp-lib out-lib ncurses-lib
                                                  (dirname ld-so)) ":"))
@@ -122,7 +122,7 @@
     (build-system copy-build-system)
     (arguments
       (list #:install-plan
-	    ''(("cabal" "bin/"))))
+       ''(("cabal" "bin/"))))
     (synopsis "cabal-install tool")
     (description "cabal-install tool")
     (home-page "https://www.haskell.org/cabal/")
@@ -139,8 +139,8 @@
     (build-system copy-build-system)
     (arguments
       (list #:install-plan
-	    ''(("stack" "bin/")
-	       ("doc" "share/doc/stack"))))
+       ''(("stack" "bin/")
+          ("doc" "share/doc/stack"))))
     (synopsis "stack tool")
     (description "stack tool")
     (home-page "https://haskellstack.org/")
