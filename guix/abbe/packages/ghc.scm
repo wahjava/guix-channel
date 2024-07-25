@@ -49,7 +49,7 @@
 
 (define-public ghc-bin
   (package
-    (name "ghc")
+    (name "ghc-bin")
     (version "9.6.6")
     (source
      (origin (method url-fetch)
@@ -106,7 +106,7 @@
 
 (define-public cabal-install-bin
   (package
-    (name "cabal-install")
+    (name "cabal-install-bin")
     (version "3.10.1.0")
     (source (origin
               (method url-fetch)
@@ -130,7 +130,7 @@
 
 (define-public stack-bin
   (package
-    (name "stack")
+    (name "stack-bin")
     (version "2.15.7")
     (source (origin
               (method url-fetch)
@@ -148,7 +148,7 @@
 
 (define-public haskell-language-server-bin
   (package
-    (name "haskell-language-server")
+    (name "haskell-language-server-bin")
     (version "2.9.0.1")
     (source (origin
               (method url-fetch)
