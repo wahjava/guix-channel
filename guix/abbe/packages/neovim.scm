@@ -33,7 +33,7 @@
   (package
     (inherit neovim)
     (name "neovim")
-    (version "0.10.0")
+    (version "0.10.1")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -42,14 +42,15 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "0bd9hxnskyfg7k51yxf3gnqhv9l3y4m91yqd8svzj7d5sb2jxc1n"))))
+                "1xmncdj6nxa45m0qk3wmnp7b5d0iqqapy1m2vqzv316rr2snxrg4"))))
     (inputs (modify-inputs (package-inputs neovim)
-	      (replace "tree-sitter" tree-sitter-0-22-6)))))
+             (replace "tree-sitter" tree-sitter-0-22-6)))))
 
 (define-public neovim-bin
   (package
     (inherit neovim)
-    (version "0.10.0")
+    (name "neovim-bin")
+    (version "0.10.1")
     (build-system binary-build-system)
     (arguments
      `(#:patchelf-plan
@@ -60,7 +61,7 @@
       `(,gcc "lib")))
     (native-inputs '())
     (source (origin
-	      (method url-fetch)
-	      (uri (string-append
-		     "https://github.com/neovim/neovim/releases/download/v" version "/nvim-linux64.tar.gz"))
-	      (sha256 (base16-string->bytevector "be1f0988d0de71c375982b87b86cd28d2bab35ece8285abe3b0aac57604dfc5a"))))))
+             (method url-fetch)
+             (uri (string-append
+                   "https://github.com/neovim/neovim/releases/download/v" version "/nvim-linux64.tar.gz"))
+             (sha256 (base16-string->bytevector "4867de01a17f6083f902f8aa5215b40b0ed3a36e83cc0293de3f11708f1f9793"))))))
