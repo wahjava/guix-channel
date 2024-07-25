@@ -28,13 +28,8 @@
          (block-time sshguard-configuration-block-time
            (default 120)))
 
-(define (sshguard-activation config)
-  "Run sshguard --cleanup"
-  #~(begin
-      (system* #$(file-append sshguard "/bin/sshguard") "--cleanup")))
-
-(define (sshguard-shepherd-service config)
-  "Return a <shepherd-service> for Tailscaled with CONFIG"
+(define-public (sshguard-shepherd-service config)
+  "Return a <shepherd-service> for sshguard with CONFIG"
   (let ((whitelist (apply append (map (lambda (ip) (list  "-w" ip))
                                       (sshguard-configuration-whitelist-ips config))))
         (blacklist-threshold (list "-a" (number->string (sshguard-configuration-blacklist-threshold config))))
@@ -48,25 +43,25 @@
                         (string-append "PATH=" ; iptables is required for sshguard to work
                                        (string-append #$nftables "/sbin")
                                        ":"
-                                       (string-append #$nftables "/bin"))
+                                       (string-append #$nftables "/bin")
+                                       ":"
+                                       (string-append #$coreutils "/bin"))
                         (string-append "SSHGUARD_CONFIG_FILE="
-                                       (local-file "sshguard.conf"
-                                                   (string-join
-                                                     (list (string-append "BACKEND=\"" #$sshguard "/libexec/sshg-fw-nft-sets\"")
-                                                           (string-append "LOGREADER=\"LANG=C " #$coreutils "/bin/tail -F -n 100000 /var/log/secure\""))
-                                                     "\n"))))))
+                                       #$(mixed-text-file "sshguard.conf"
+                                            "BACKEND=\"" sshguard "/libexec/sshg-fw-nft-sets\"\n")))))
+
       (list
        (shepherd-service
            (provision '(sshguard))
         (requirement '(networking)) ;; services this depends on
         (start #~(make-forkexec-constructor
-                  (cons #$(file-append sshguard "/sbin/sshguard")
-                        (append #$whitelist
-                                #$blacklist-threshold
-                                #$blacklist-file
-                                #$block-time
-                                #$detection-time
-                                '("/var/log/secure")))
+                  (cons* #$(file-append sshguard "/sbin/sshguard")
+                         #$@whitelist
+                         #$@blacklist-threshold
+             ;                    #$blacklist-file
+                         #$@block-time
+                         #$@detection-time
+                         '("/var/log/secure"))
                   #:environment-variables #$environment))
         (stop #~(make-kill-destructor))))))
 
