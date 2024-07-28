@@ -38,7 +38,7 @@
                                          (setenv "CC" "gcc")
                                          (invoke "sh" "make.sh" "sbcl"
                                                  (string-append "--prefix=" (assoc-ref outputs "out"))
-                                                 "--dynamic-space-size=3072"
+                                                 "--dynamic-space-size=10240"
                                                  "--with-sb-core-compression"
                                                  "--with-sb-xref-for-internals"
                                                  "--with-sb-simd")))))))))
