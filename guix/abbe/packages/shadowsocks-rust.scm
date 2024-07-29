@@ -17,8 +17,39 @@
                                          "/shadowsocks-v" version ".aarch64-unknown-linux-musl.tar.xz"))
          ("x86_64-linux" (string-append "https://github.com/shadowsocks/shadowsocks-rust/releases/download/v" version
                                         "/shadowsocks-v" version ".x86_64-unknown-linux-musl.tar.xz"))))
-          
-           
+
+(define (shadowsocks-v2ray-url version)
+  (match (%current-system)
+         ("aarch64-linux" (string-append "https://github.com/shadowsocks/v2ray-plugin/releases/download/v" version
+                                         "/v2ray-plugin-linux-arm64-v" version ".tar.gz"))
+         ("x86_64-linux" (string-append "https://github.com/shadowsocks/v2ray-plugin/releases/download/v" version
+                                        "/v2ray-plugin-linux-amd64-v" version ".tar.gz"))))
+
+(define (shadowsocks-v2ray-hash)
+  (match (%current-system)
+         ("aarch64-linux" "1hzycqgcwifi4jih7w778135n759mn0x42bqa7ncsjfjvdy4c1zg")
+         ("x86_64-linux"  "06jlxs9kjprfhg1rzh2v2f2my83pf8da18hsi07j72xr6m152y5m")))
+
+(define-public shadowsocks-v2ray-plugin
+               (package
+                 (name "shadowsocks-v2ray-plugin")
+                 (version "1.3.2")
+                 (source (origin
+                           (method url-fetch/tarbomb)
+                           (uri (shadowsocks-v2ray-url version))
+                           (sha256 (base32 (shadowsocks-v2ray-hash)))))
+                 (build-system copy-build-system)
+                 (arguments
+                   `(#:install-plan
+                     '((,(match (%current-system)
+                                 ("aarch64-linux" "v2ray-plugin_linux_arm64")
+                                 ("x86_64-linux" "v2ray-plugin_linux_amd64")) "bin/v2ray-plugin"))))
+
+                 (home-page "https://shadowsocks.org/")
+                 (synopsis "A SIP003 plugin based on v2ray")
+                 (description "Yet another SIP003 plugin for shadowsocks, based on v2ray")
+                 (license license:expat)))
+
 (define-public shadowsocks-rust
                (package
                  (name "shadowsocks-rust")
