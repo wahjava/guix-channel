@@ -5,6 +5,7 @@
   #:use-module (guix build-system copy)
   #:use-module (guix download)
   #:use-module (guix licenses)
+  #:use-module (guix base16)
   #:use-module (ice-9 match))
 
 (define (flyctl-arch system)
@@ -19,17 +20,17 @@
 
 (define (flyctl-hash system)
   (match system
-    ("aarch64-linux" "0j91409ggm8vpwpb407vivz3plkbrid8gmmha2i02ikglyxkpws2")
-    ("x86_64-linux" "1s01jgwa2pmcx7315scjlkm9lwqzlawc2a2hgs6gz8azxg1pd04b")))
+    ("aarch64-linux" "049d666d26f916ae636b752defb3a705e7ba055ecef014399ea5ac766a1bb1e1")
+    ("x86_64-linux" "3afb88f7c65aed434c40befac984eacc081e2b328500255c5095a5f6abd86f7b")))
 
 (define-public flyctl
   (package
    (name "flyctl")
-   (version "0.2.72")
+   (version "0.2.99")
    (source (origin
             (method url-fetch/tarbomb)
             (uri (flyctl-url version (%current-system)))
-            (sha256 (base32 (flyctl-hash (%current-system))))))
+            (sha256 (base16-string->bytevector (flyctl-hash (%current-system))))))
    (build-system copy-build-system)
    (arguments
     `(#:install-plan
