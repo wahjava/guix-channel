@@ -7,17 +7,17 @@
   #:use-module (guix git))
 
 (define-public oh-my-zsh
-  (let ((rev "be10a9127731e7c6a9a57f8c8c1789e233117ae9"))
+  (let ((rev "d525e80355597d752f941edfe0415b3ae881a774"))
     (package
       (name "oh-my-zsh")
-      (version "20240715")
+      (version "20240730")
       (source
        (origin (method git-fetch)
                (uri (git-reference
                      (url "https://github.com/ohmyzsh/ohmyzsh")
                      (commit rev)))
                (file-name (git-file-name name version))
-               (sha256 (base32 "1mh3ggswgv4gzpsjbki36cynwjxcwqcdbcbyydn0gmdw283cs418"))))
+               (sha256 (base32 "1mh4blj773gd7pyypzz3k39y2dw6pa0i8wy04hc8vskd1v1gsdwz"))))
       (build-system copy-build-system)
       (home-page "https://ohmyz.sh/")
       (synopsis "Oh My Zsh configuration framework")
