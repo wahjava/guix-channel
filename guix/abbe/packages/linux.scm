@@ -123,9 +123,9 @@ stable, responsive and smooth desktop experience.")))
   (make-linux-xanmod-source
    linux-xanmod-ng-version
    linux-xanmod-ng-revision
-   #:xanmod-branch "main"
+   #:xanmod-branch "edge"
    #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
-   #:xanmod-hash (base32 "0wxh1izdfk1xl7cgk4d8cm4c45rg12b46bd0bznnqa0dkc183igs")))
+   #:xanmod-hash (base32 "1blnhm9sy7dhdzxj0a9ak1l5ihin2frnx9ww1p0xd32jnx5fvqnf")))
 
 ;; Linux-XanMod packages
 (define-public linux-xanmod-ng
