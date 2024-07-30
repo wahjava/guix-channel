@@ -8,6 +8,7 @@
          #:use-module (ice-9 match)
          #:use-module (gnu packages base)
          #:use-module (gnu packages linux)
+         #:use-module (guix build utils)
          #:export (caddy-service-type))
 
 (define %caddy-pidfile
@@ -19,15 +20,15 @@
 (define %caddy-log
   "/var/log/caddy")
 
-(define (caddy-activation)
-  #~(begin
-      (mkdir-p %caddy-home)
-      (mkdir-p %caddy-log)))
+(define (caddy-activation _)
+  (begin
+    (mkdir-p %caddy-home)
+    (mkdir-p %caddy-log)))
 
 (define (caddy-shepherd-service config)
   "Return a <shepherd-service> for caddy with CONFIG file"
-  (let ((environment (list "XDG_DATA_HOME=/var/lib"
-                           "XDG_CONFIG_HOME=/var/lib")))
+  (let ((environment #~(list "XDG_DATA_HOME=/var/lib"
+                             "XDG_CONFIG_HOME=/var/lib")))
     (list
      (shepherd-service
       (provision '(caddy))
@@ -36,11 +37,13 @@
                 (list #$(file-append caddy "/bin/caddy")
                       "start"
                       "--config"
-                      config
+                      #$config
+                      "--adapter"
+                      "caddyfile"
                       "--pidfile"
-                      %caddy-pidfile)
-                #:pid-file %caddy-pidfile
-                #:environment-variables environment))
+                      #$%caddy-pidfile)
+                #:pid-file #$%caddy-pidfile
+                #:environment-variables #$environment))
       (stop #~(make-kill-destructor))))))
 
 (define caddy-service-type
