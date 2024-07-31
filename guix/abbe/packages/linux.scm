@@ -143,7 +143,7 @@ stable, responsive and smooth desktop experience.")))
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
        ((#:linux original-linux linux-xanmod-ng)
-        linux-xanmod))))))
+        linux-xanmod-ng))))))
 
 (define-public linux-xanmod-version "6.9.12")
 (define-public linux-xanmod-revision "xanmod1")
