@@ -44,9 +44,15 @@
                         "5ad708085a90365f"
                         "fb4e90b662803e47"
                         "05h2mb6g0840yq74x1cdj95jmqb95i75h6g5v0rzqdc994b96cd4")))))
+    (arguments
+      (substitute-keyword-arguments
+        (package-arguments fossil)
+        ((#:configure-flags _)
+         #~(list "--with-openssl=auto"
+                 "--enable-json"))))
+
     (inputs (modify-inputs (package-inputs fossil)
-             (delete "sqlite")
-             (append sqlite-next)))))
+             (delete "sqlite")))))
 
 (define-public fossil-bin
   (package/inherit fossil
