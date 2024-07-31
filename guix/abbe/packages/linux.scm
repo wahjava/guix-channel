@@ -140,7 +140,6 @@ stable, responsive and smooth desktop experience.")))
   (list
    (package/inherit
     tuxedo-keyboard
-    (name "tuxedo-keyboard-linux-xanmod-ng")
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
        ((#:linux original-linux linux-xanmod-ng)
