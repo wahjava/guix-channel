@@ -161,6 +161,11 @@ stable, responsive and smooth desktop experience.")))
       ((#:linux original-linux linux-xanmod-ng)
        linux-xanmod-ng)))))
 
+(define-public bpftool-xanmod-ng
+               (package/inherit bpftool
+                                (source  (package-source linux-xanmod-ng))
+                                (version (package-version linux-xanmod-ng))))
+
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
 (define-public linux-xanmod-version "6.9.12")
@@ -196,5 +201,11 @@ stable, responsive and smooth desktop experience.")))
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
       ((#:linux original-linux linux-xanmod)
        linux-xanmod)))))
+
+(define-public bpftool-xanmod
+               (package/inherit bpftool
+                                (source  (package-source linux-xanmod))
+                                (version (package-version linux-xanmod))))
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
