@@ -1,6 +1,7 @@
 (define-module (abbe packages linux)
   #:use-module (guix packages)
   #:use-module (guix utils)
+  #:use-module (guix git-download)
   #:use-module (guix download)
   #:use-module (guix gexp)
   #:use-module (gnu packages base)
@@ -136,11 +137,22 @@ stable, responsive and smooth desktop experience.")))
                      #:name "linux-xanmod-ng"
                      #:xanmod-defconfig "config_x86-64-v3"))
 
+(define tuxedo-keyboard-update
+  (package/inherit tuxedo-keyboard
+                   (name "tuxedo-keyboard")
+                   (version "4.6.1")
+                   (source (origin (method git-fetch)
+                                   (uri (git-reference
+                                          (url "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers.git")
+                                          (commit (string-append "v" version))))
+                                   (file-name (git-file-name name version))
+                                   (sha256 (base32 "0hbqk28qi3yxw0g3j8yarsplyigpd8kgliri7c48d3yhliiiz7l5"))))))
+
 (define-public lkm-tuxedo-keyboard-xanmod-ng
    (package/inherit
-    tuxedo-keyboard
+    tuxedo-keyboard-update
     (arguments
-     (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
+     (substitute-keyword-arguments (package-arguments tuxedo-keyboard-update)
        ((#:linux original-linux linux-xanmod-ng)
         linux-xanmod-ng)))))
 
