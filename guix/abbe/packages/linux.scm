@@ -134,7 +134,7 @@ stable, responsive and smooth desktop experience.")))
                      linux-xanmod-ng-revision
                      linux-xanmod-ng-source
                      #:name "linux-xanmod-ng"
-                     #:defconfig "config_x86-64-v3"))
+                     #:xanmod-defconfig "config_x86-64-v3"))
 
 (define-public lkm-tuxedo-keyboard-xanmod-ng
   (list
@@ -162,7 +162,6 @@ stable, responsive and smooth desktop experience.")))
   (make-linux-xanmod-source
    linux-xanmod-version
    linux-xanmod-revision
-   #:defconfig "config_x86-64-v4"
    #:xanmod-branch "main"
    #:kernel-hash (base32 "0jc14s7z2581qgd82lww25p7c4w72scpf49z8ll3wylwk3xh3yi4")
    #:xanmod-hash (base32 "1n68ylzvcv7sjdlcpfixw79fbinsaywh9svg0v6npdv1afkz95j0")))
@@ -171,7 +170,8 @@ stable, responsive and smooth desktop experience.")))
 (define-public linux-xanmod
   (make-linux-xanmod linux-xanmod-version
                      linux-xanmod-revision
-                     linux-xanmod-source))
+                     linux-xanmod-source
+                     #:xanmod-defconfig "config_x86-64-v4"))
 
 (define-public zfs-xanmod
   (list
