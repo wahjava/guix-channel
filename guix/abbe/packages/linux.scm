@@ -210,6 +210,12 @@ stable, responsive and smooth desktop experience.")))
        ((#:linux original-linux linux-xanmod)
         linux-xanmod)))))
 
+(define-public zfs-auto-snapshot-xanmod
+   (package/inherit
+    zfs-auto-snapshot
+    (inputs (modify-inputs (package-inputs zfs-auto-snapshot)
+                           (replace "zfs" zfs-xanmod)))))
+
 (define-public ddcci-xanmod
   (package/inherit
    ddcci-driver-linux-patched
