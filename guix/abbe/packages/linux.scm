@@ -145,6 +145,16 @@ stable, responsive and smooth desktop experience.")))
        ((#:linux original-linux linux-xanmod-ng)
         linux-xanmod-ng))))))
 
+(define-public ddcci-xanmod-ng
+  (package/inherit
+   ddcci-driver-linux
+   (arguments
+    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+      ((#:linux original-linux linux-xanmod-ng)
+       linux-xanmod-ng)))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+
 (define-public linux-xanmod-version "6.9.12")
 (define-public linux-xanmod-revision "xanmod1")
 (define-public linux-xanmod-source
@@ -170,5 +180,13 @@ stable, responsive and smooth desktop experience.")))
      (substitute-keyword-arguments (package-arguments zfs)
        ((#:linux original-linux linux-xanmod)
         linux-xanmod))))))
+
+(define-public ddcci-xanmod
+  (package/inherit
+   ddcci-driver-linux
+   (arguments
+    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+      ((#:linux original-linux linux-xanmod)
+       linux-xanmod)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
