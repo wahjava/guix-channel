@@ -145,9 +145,17 @@ stable, responsive and smooth desktop experience.")))
        ((#:linux original-linux linux-xanmod-ng)
         linux-xanmod-ng))))))
 
+(define ddcci-driver-linux-patched
+  (let ((fix-610-patch
+          (origin (method url-fetch)
+                  (uri "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/16.patch")
+                  (sha256 (base32 "01nia9a5gd0d2k0f0gnms46zaxprs310h7v132jsrf5xmlzslhrn"))
+                  (file-name "ddcci-fix-on-6-10.patch"))))
+    (package-with-extra-patches ddcci-driver-linux (list fix-610-patch))))
+
 (define-public ddcci-xanmod-ng
   (package/inherit
-   ddcci-driver-linux
+   ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
       ((#:linux original-linux linux-xanmod-ng)
@@ -183,7 +191,7 @@ stable, responsive and smooth desktop experience.")))
 
 (define-public ddcci-xanmod
   (package/inherit
-   ddcci-driver-linux
+   ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
       ((#:linux original-linux linux-xanmod)
