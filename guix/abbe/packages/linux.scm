@@ -203,12 +203,10 @@ stable, responsive and smooth desktop experience.")))
                      #:xanmod-defconfig "config_x86-64-v4"))
 
 (define-public zfs-xanmod
-   (package/inherit
-    zfs
+   (package/inherit zfs
     (arguments
-     (substitute-keyword-arguments (package-arguments zfs)
-       ((#:linux original-linux linux-xanmod)
-        linux-xanmod)))))
+      (cons* #:linux linux-xanmod
+             (package-arguments zfs)))))
 
 (define-public zfs-auto-snapshot-xanmod
    (package/inherit
