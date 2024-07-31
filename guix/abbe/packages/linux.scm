@@ -137,13 +137,12 @@ stable, responsive and smooth desktop experience.")))
                      #:xanmod-defconfig "config_x86-64-v3"))
 
 (define-public lkm-tuxedo-keyboard-xanmod-ng
-  (list
    (package/inherit
     tuxedo-keyboard
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
        ((#:linux original-linux linux-xanmod-ng)
-        linux-xanmod-ng))))))
+        linux-xanmod-ng)))))
 
 (define ddcci-driver-linux-patched
   (let ((fix-610-patch
