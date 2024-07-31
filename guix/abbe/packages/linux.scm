@@ -144,3 +144,31 @@ stable, responsive and smooth desktop experience.")))
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
        ((#:linux original-linux linux-xanmod-ng)
         linux-xanmod))))))
+
+(define-public linux-xanmod-version "6.9.12")
+(define-public linux-xanmod-revision "xanmod1")
+(define-public linux-xanmod-source
+  (make-linux-xanmod-source
+   linux-xanmod-version
+   linux-xanmod-revision
+   #:xanmod-defconfig "config_x86-64-v4"
+   #:xanmod-branch "main"
+   #:kernel-hash (base32 "0jc14s7z2581qgd82lww25p7c4w72scpf49z8ll3wylwk3xh3yi4")
+   #:xanmod-hash (base32 "1n68ylzvcv7sjdlcpfixw79fbinsaywh9svg0v6npdv1afkz95j0")))
+
+
+(define-public linux-xanmod
+  (make-linux-xanmod linux-xanmod-version
+                     linux-xanmod-revision
+                     linux-xanmod-source))
+
+(define-public zfs-xanmod
+  (list
+   (package/inherit
+    zfs
+    (arguments
+     (substitute-keyword-arguments (package-arguments zfs)
+       ((#:linux original-linux linux-xanmod)
+        linux-xanmod))))))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
