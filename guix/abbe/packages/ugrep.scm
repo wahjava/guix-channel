@@ -9,7 +9,7 @@
   (package
     (inherit ugrep)
     (name "ugrep")
-    (version "6.2.0")
+    (version "6.3.0")
     (inputs (modify-inputs (package-inputs ugrep)
 			   (append brotli)))
     (source (origin
@@ -18,7 +18,7 @@
                       (url "https://github.com/Genivia/ugrep")
                       (commit (string-append "v" version))))
                 (sha256 (base32 
-			 "1j3cz6y1rqz64604afk7fa00yqmwjpgmnd7gsaa4x3kgldqfdlr2"))
+			 "0s4cic232nlqzr3ha40gfgdnfqj12j6k5j89mrzjv8gk2zwn9l5z"))
 		(file-name (git-file-name name version))
                 (modules '((guix build utils)))
                 (snippet
