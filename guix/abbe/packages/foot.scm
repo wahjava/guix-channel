@@ -11,6 +11,6 @@
                                   (origin (method git-fetch)
                                           (uri (git-reference
                                                  (url "https://codeberg.org/dnkl/foot")
-                                                 (commit "1znfk64kimm0vr3alvj66i1yn5glig3bw60n2lv9cn4jzi1b7qhb")))
+                                                 (commit version)))
                                           (file-name (git-file-name name version))
-                                          (sha256 (base32 (make-string 52 #\0)))))))
+                                          (sha256 (base32 "1znfk64kimm0vr3alvj66i1yn5glig3bw60n2lv9cn4jzi1b7qhb"))))))
