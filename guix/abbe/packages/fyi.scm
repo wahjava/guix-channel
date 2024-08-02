@@ -9,14 +9,14 @@
 (define-public fyi
   (package
     (name "fyi")
-    (version "1.0.1")
+    (version "1.0.2")
     (source (origin
               (method git-fetch)
               (uri (git-reference
                     (url "https://codeberg.org/dnkl/fyi")
                     (commit version)))
               (file-name (git-file-name name version))
-              (sha256 (base32 "19l1w30wsm3gac0s1f81jxgmibi3qgx8f73hi047ykbxiwdccvqz"))))
+              (sha256 (base32 "1cbqx659fzfnjdhvimwng7h4yx35rm9aldp8jq75hqxf1lqm7xb6"))))
     (build-system meson-build-system)
     (inputs (list dbus))
     (native-inputs (list pkg-config))
