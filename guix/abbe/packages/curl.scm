@@ -2,6 +2,8 @@
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix gexp)
+  #:use-module (guix download)
+  #:use-module (gnu packages)
   #:use-module (gnu packages networking)
   #:use-module (gnu packages web)
   #:use-module (gnu packages curl))
