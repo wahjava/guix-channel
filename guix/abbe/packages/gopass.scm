@@ -19,13 +19,13 @@
 
 (define (gopass-hash system)
   (match system
-    ("aarch64-linux" "0cwwp241ia5lq65rk6nkggxkw6ifzzi0gx5gpigrb110p2swixq8")
-    ("x86_64-linux" "1w3vzrdmj9s9vf4lrmw90rc8zdxd64yz9rc00drc27fy9z2gn4nm")))
+    ("aarch64-linux" "0gaqk8z4sb4gbnicmhznqmar1b7r39vjvb2bddnpn1w1dwxyhp33")
+    ("x86_64-linux" "0gssd4yqz1kbf8yf723b6l03lr0kfm1f0qk0p1krvf5fxmq8xabs")))
 
 (define-public gopass
   (package
    (name "gopass")
-   (version "1.15.13")
+   (version "1.15.14")
    (source (origin
             (method url-fetch/tarbomb)
             (uri (gopass-url version (%current-system)))
