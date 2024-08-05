@@ -15,7 +15,7 @@
 (define (fzf-url version system)
   (let ([system (fzf-arch system)])
     (string-append
-      "https://github.com/junegunn/fzf/releases/download/" version "/fzf-" version "-" system ".tar.gz")))
+      "https://github.com/junegunn/fzf/releases/download/v" version "/fzf-" version "-" system ".tar.gz")))
 
 (define (fzf-hash system)
   (match system
