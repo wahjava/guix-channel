@@ -98,7 +98,8 @@
                           (append %default-extra-linux-options
                                   ;; NOTE: These are configs expected by Guix
                                   ;; but missing from XanMod defconfig.
-                                  '(("CONFIG_BLK_DEV_NVME" . #t))))))
+                                  '(("CONFIG_BLK_DEV_NVME" . #t)
+                                    ("CONFIG_FTRACE" . #t))))))
                   (display extra-configuration port)
                   (close-port port))
                 (invoke "make" "oldconfig")
