@@ -98,7 +98,7 @@
                           (append %default-extra-linux-options
                                   ;; NOTE: These are configs expected by Guix
                                   ;; but missing from XanMod defconfig.
-                                  '(("CONFIG_CONFIG_BLK_DEV_NVME" . #t)
+                                  '(("CONFIG_BLK_DEV_NVME" . #t)
                                     ("CONFIG_ENABLE_DEFAULT_TRACERS" . #t)
                                     ("CONFIG_FTRACE_SYSCALLS" . #t)
                                     ("CONFIG_STACK_TRACER" . #t)
