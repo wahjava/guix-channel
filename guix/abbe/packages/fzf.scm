@@ -19,13 +19,13 @@
 
 (define (fzf-hash system)
   (match system
-    ("x86_64-linux" "15ipbvq0d84qjimlacha95zs7y79q99pwlr13lcxqrwr631n69mg")
-    ("aarch64-linux" "0fx4jjfkf50m6c2rf87kzybpdsnr5yssdzv5rg5laga3ns6wzd25")))
+    ("x86_64-linux" "1xlc6kcw8mpll5c0rmv5d9zna91jvjzvjaml91p06zrh8s600rv8")
+    ("aarch64-linux" "1vcsxz1zb7gq627rv55hhs02k0g7bwh9p1c220iq61pn2b961jjd")))
 
 (define-public fzf
   (package
    (name "fzf")
-   (version "0.53.0")
+   (version "0.54.3")
    (source (origin
             (method url-fetch/tarbomb)
             (uri (fzf-url version (%current-system)))
