@@ -167,7 +167,7 @@ stable, responsive and smooth desktop experience.")))
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard-update)
        ((#:linux original-linux linux-xanmod-ng-v3)
-        linux-xanmod-ng)))))
+        linux-xanmod-ng-v3)))))
 
 (define ddcci-driver-linux-patched
   (let ((fix-610-patch
@@ -184,6 +184,14 @@ stable, responsive and smooth desktop experience.")))
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
       ((#:linux original-linux linux-xanmod-ng-v3)
        linux-xanmod-ng-v3)))))
+
+(define-public ddcci-xanmod-ng-v4
+  (package/inherit
+   ddcci-driver-linux-patched
+   (arguments
+    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+      ((#:linux original-linux linux-xanmod-ng-v4)
+       linux-xanmod-ng-v4)))))
 
 (define-public bpftool-xanmod-ng
                (package/inherit bpftool
