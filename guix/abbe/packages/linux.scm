@@ -206,7 +206,7 @@ stable, responsive and smooth desktop experience.")))
    (package/inherit
     zfs-auto-snapshot
     (inputs (modify-inputs (package-inputs zfs-auto-snapshot)
-                           (replace "zfs" zfs-xanmod-ng-v4)))))
+                           (replace "zfs" zfs-xanmod-ng)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
