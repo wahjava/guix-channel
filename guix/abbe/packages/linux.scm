@@ -99,6 +99,13 @@
                                   ;; NOTE: These are configs expected by Guix
                                   ;; but missing from XanMod defconfig.
                                   '(("CONFIG_BLK_DEV_NVME" . #t)
+                                    ("ENABLE_DEFAULT_TRACERS" . #t)
+                                    ("FTRACE_SYSCALLS" . #t)
+                                    ("STACK_TRACER" . #t)
+                                    ("DYNAMIC_FTRACE" . #t)
+                                    ("FUNCTION_PROFILER" . #t)
+                                    ("FUNCTION_GRAPH_TRACER" . #t)
+                                    ("FUNCTION_TRACER" . #t)
                                     ("CONFIG_FTRACE" . #t))))))
                   (display extra-configuration port)
                   (close-port port))
