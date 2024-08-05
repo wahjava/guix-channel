@@ -98,14 +98,14 @@
                           (append %default-extra-linux-options
                                   ;; NOTE: These are configs expected by Guix
                                   ;; but missing from XanMod defconfig.
-                                  '(("CONFIG_BLK_DEV_NVME" . #t)
-                                    ("ENABLE_DEFAULT_TRACERS" . #t)
-                                    ("FTRACE_SYSCALLS" . #t)
-                                    ("STACK_TRACER" . #t)
-                                    ("DYNAMIC_FTRACE" . #t)
-                                    ("FUNCTION_PROFILER" . #t)
-                                    ("FUNCTION_GRAPH_TRACER" . #t)
-                                    ("FUNCTION_TRACER" . #t)
+                                  '(("CONFIG_CONFIG_BLK_DEV_NVME" . #t)
+                                    ("CONFIG_ENABLE_DEFAULT_TRACERS" . #t)
+                                    ("CONFIG_FTRACE_SYSCALLS" . #t)
+                                    ("CONFIG_STACK_TRACER" . #t)
+                                    ("CONFIG_DYNAMIC_FTRACE" . #t)
+                                    ("CONFIG_FUNCTION_PROFILER" . #t)
+                                    ("CONFIG_FUNCTION_GRAPH_TRACER" . #t)
+                                    ("CONFIG_FUNCTION_TRACER" . #t)
                                     ("CONFIG_FTRACE" . #t))))))
                   (display extra-configuration port)
                   (close-port port))
