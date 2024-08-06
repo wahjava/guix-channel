@@ -1,4 +1,5 @@
 (define-module (abbe packages linux)
+  #:use-module (abbe packages zfs)
   #:use-module (guix packages)
   #:use-module (guix utils)
   #:use-module (guix git-download)
@@ -211,10 +212,10 @@ stable, responsive and smooth desktop experience.")))
                      #:xanmod-defconfig "config_x86-64-v4"))
 
 (define-public zfs-xanmod
-   (package/inherit zfs
+   (package/inherit zfs-2-2-5
     (arguments
       (cons* #:linux linux-xanmod
-             (package-arguments zfs)))))
+             (package-arguments zfs-2-2-5)))))
 
 (define-public zfs-auto-snapshot-xanmod
    (package/inherit
