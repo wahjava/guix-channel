@@ -139,12 +139,19 @@ stable, responsive and smooth desktop experience.")))
    #:xanmod-hash (base32 "089rcys958yvfp1kjyflqmihmixmpnkj40mgs1rvi1k8112gvd70")))
 
 ;; Linux-XanMod packages
-(define-public linux-xanmod-ng
+(define-public linux-xanmod-ng-v3
   (make-linux-xanmod linux-xanmod-ng-version
                      linux-xanmod-ng-revision
                      linux-xanmod-ng-source
                      #:name "linux-xanmod-ng"
                      #:xanmod-defconfig "config_x86-64-v3"))
+
+(define-public linux-xanmod-ng-v4
+  (make-linux-xanmod linux-xanmod-ng-version
+                     linux-xanmod-ng-revision
+                     linux-xanmod-ng-source
+                     #:name "linux-xanmod-ng"
+                     #:xanmod-defconfig "config_x86-64-v4"))
 
 (define tuxedo-keyboard-update
   (let ((fix-patch
@@ -168,8 +175,8 @@ stable, responsive and smooth desktop experience.")))
     tuxedo-keyboard-update
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard-update)
-       ((#:linux original-linux linux-xanmod-ng)
-        linux-xanmod-ng)))))
+       ((#:linux original-linux linux-xanmod-ng-v3)
+        linux-xanmod-ng-v3)))))
 
 (define ddcci-driver-linux-patched
   (let ((fix-610-patch
@@ -179,18 +186,44 @@ stable, responsive and smooth desktop experience.")))
                   (file-name "ddcci-fix-on-6-10.patch"))))
     (package-with-extra-patches ddcci-driver-linux (list fix-610-patch))))
 
-(define-public ddcci-xanmod-ng
+(define-public ddcci-xanmod-ng-v3
   (package/inherit
    ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng)
-       linux-xanmod-ng)))))
+      ((#:linux original-linux linux-xanmod-ng-v3)
+       linux-xanmod-ng-v3)))))
+
+(define-public ddcci-xanmod-ng-v4
+  (package/inherit
+   ddcci-driver-linux-patched
+   (arguments
+    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+      ((#:linux original-linux linux-xanmod-ng-v4)
+       linux-xanmod-ng-v4)))))
 
 (define-public bpftool-xanmod-ng
                (package/inherit bpftool
-                                (source  (package-source linux-xanmod-ng))
-                                (version (package-version linux-xanmod-ng))))
+                                (source  (package-source linux-xanmod-ng-v3))
+                                (version (package-version linux-xanmod-ng-v3))))
+
+(define-public bpftool-xanmod-ng-v4
+               (package/inherit bpftool
+                                (source  (package-source linux-xanmod-ng-v4))
+                                (version (package-version linux-xanmod-ng-v4))))
+
+
+(define-public zfs-xanmod-ng
+   (package/inherit zfs
+    (arguments
+      (cons* #:linux linux-xanmod-ng-v4
+             (package-arguments zfs)))))
+
+(define-public zfs-auto-snapshot-xanmod-ng
+   (package/inherit
+    zfs-auto-snapshot
+    (inputs (modify-inputs (package-inputs zfs-auto-snapshot)
+                           (replace "zfs" zfs-xanmod-ng)))))
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
