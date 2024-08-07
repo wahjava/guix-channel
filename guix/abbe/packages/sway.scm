@@ -7,6 +7,7 @@
   #:use-module (guix modules)
   #:use-module (gnu packages build-tools)
   #:use-module (gnu packages cmake)
+  #:use-module (gnu packages pciutils)
   #:use-module (gnu packages freedesktop)
   #:use-module (gnu packages xdisorg)
   #:use-module (gnu packages wm))
@@ -82,6 +83,21 @@
                      (commit version)))
               (sha256 (base32 "094k23i10jjmgdzhv5lj7xpc3fgkwi9afcihf0l2fjj71ym8l9fy"))))))
 
+(define hwdata-next
+  (package/inherit hwdata
+    (version "0.385")
+    (source (origin (method git-fetch)
+                    (uri (git-reference
+                           (url "https://github.com/vcrhonek/hwdata")
+                           (commit (string-append "v" version))))
+                    (file-name (git-file-name "hwdata" version))
+                    (sha256 (base32 "1a3020335nblx8k3bs40ng6yxkl77i2cl1imdiffapx5p9388v10"))))
+    (outputs '("out"))
+    (arguments
+      (list #:tests? #f
+            #:configure-flags #~(list (string-append "--datadir=" #$output "/share"))
+            #:target #f))))
+
 (define wlroots-git
   (package/inherit wlroots
     (name "wlroots")
@@ -89,10 +105,14 @@
     (arguments
       (substitute-keyword-arguments (package-arguments wlroots)
         ((#:meson old-meson meson)
-         meson-next)))
+         meson-next)
+        ((#:configure-flags old-configure-flags #~(list))
+         #~(cons "-Dbackends=drm,libinput" #$old-configure-flags))))
     (native-inputs (modify-inputs (package-native-inputs wlroots)
                       (replace "wayland-protocols" wayland-protocols-next)
-                      (replace "wayland" wayland-next)))
+                      (replace "wayland" wayland-next)
+                      (delete "hwdata")
+                      (append hwdata-next)))
     (propagated-inputs (modify-inputs (package-propagated-inputs wlroots)
                            (replace "wayland" wayland-next)
                            (replace "wayland-protocols" wayland-protocols-next)
@@ -100,8 +120,8 @@
                            (append libdrm-next)))
     (source (origin (method git-fetch)
                     (uri (git-reference
-                         (url "https://gitlab.freedesktop.org/wlroots/wlroots")
-                         (commit "8730ca9661eaaab83954bca033745b65c60cf4f8")))
+                          (url "https://gitlab.freedesktop.org/wlroots/wlroots")
+                          (commit "8730ca9661eaaab83954bca033745b65c60cf4f8")))
                     (file-name (git-file-name name version))
                     (sha256 (base32 "1sw5scb9gidijwh1fmxjzqcnv9638r29qdakk2fbdq3mhg8g8dqx"))))))
 
