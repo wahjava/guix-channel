@@ -8,8 +8,16 @@
   #:use-module (gnu packages compression)
   #:use-module (gnu packages linux)
   #:use-module (gnu packages file-systems)
-  #:use-module (gnu packages cpio))
+  #:use-module (gnu packages cpio)
+  #:use-module (nongnu packages firmware)
+  #:use-module (abbe packages curl))
 ;  #:use-module (nongnu packages linux))
+
+(define-public fwupd-nonfree-with-curl
+  (package/inherit fwupd-nonfree
+                   (propagated-inputs
+                    (modify-inputs (package-propagated-inputs fwupd-nonfree)
+                                   (replace "curl" curl-http3)))))
 
 ;;;
 ;;; Linux-XanMod
