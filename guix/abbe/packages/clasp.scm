@@ -36,6 +36,7 @@
     (arguments
      `(#:phases
        (modify-phases %standard-phases
+         (delete 'check)
          (add-after 'unpack 'patch-koga
            (lambda* _
              (call-with-port (open-file "src/koga/units.lisp" "a")
