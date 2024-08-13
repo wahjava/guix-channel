@@ -13,7 +13,7 @@
   #:use-module (abbe packages curl))
 ;  #:use-module (nongnu packages linux))
 
-(define-public fwupd-nonfree-with-curl
+(define-public fwupd-nonfree-with-curl-http3
   (package/inherit fwupd-nonfree
                    (propagated-inputs
                     (modify-inputs (package-propagated-inputs fwupd-nonfree)
