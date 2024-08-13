@@ -76,7 +76,7 @@
              (invoke "ninja" "-C" "build")))
          (replace 'install
            (lambda* _
-             (invoke "ninja" "-C" "install"))))))
+             (invoke "ninja" "-C" "build" "install"))))))
     (home-page "https://clasp-developers.github.io/")
     (synopsis "Clasp is a Common Lisp implementation.")
     (description "Clasp is a new Common Lisp implementation that seamlessly
