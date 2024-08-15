@@ -8,8 +8,8 @@
 
 (define (shadowsocks-rust-hash)
   (match (%current-system)
-         ("aarch64-linux" "80967bf5852b9215b865849c1ecbcf3d2766aaa4e49cf8a0b35cb3d7760e72a3")
-         ("x86_64-linux"  "c524f3c3c6a45c91c8eba0a68c6543862586e41540e260c17cbdb046da895621")))
+         ("aarch64-linux" "e6c4a001b1e4200d9c43ce50acfe57cbbb4a89b69bf16feb42085e0fa49c4344")
+         ("x86_64-linux"  "bc8a262da2dfeedcec2dd38f9c82f8431f3c134d6959bea7bb6d624f4640f81e")))
 
 (define (shadowsocks-rust-url version)
   (match (%current-system)
@@ -53,7 +53,7 @@
 (define-public shadowsocks-rust
                (package
                  (name "shadowsocks-rust")
-                 (version "1.20.3")
+                 (version "1.20.4")
                  (source (origin
                            (method url-fetch)
                            (uri (shadowsocks-rust-url version))
