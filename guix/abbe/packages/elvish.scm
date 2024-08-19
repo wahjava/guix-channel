@@ -26,8 +26,8 @@
                            (sha256 (base32 (elvish-hash version)))))
                  (build-system copy-build-system)
                  (arguments
-                   (list #:install-plan
-                     `'((,(string-append "elvish-v" version) "bin/elvish"))))
+                   `(#:install-plan
+                     '(("elvish" "bin/elvish"))))
                  (home-page "https://elv.sh")
                  (synopsis "Interactive shell, and a scripting language.")
                  (description "A shell with useful interactive features built-in.")
