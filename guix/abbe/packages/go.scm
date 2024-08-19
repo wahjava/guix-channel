@@ -17,7 +17,7 @@
 
 (define-public go-122
   (package
-   (name "go")
+   (name "golang")
    (version "1.22.5")
    (source (origin
             (method url-fetch)
