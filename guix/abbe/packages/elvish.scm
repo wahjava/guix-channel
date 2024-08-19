@@ -13,13 +13,13 @@
 
 (define (elvish-hash version)
   (match (%current-system)
-         ("x86_64-linux" "01ybinl2r70dzhnq8dmd1g3r4gzpglqh933fkwzq7wpqgavig5mx")
-         ("aarch64-linux" "1rqks9z8rndkxhnfvbj5wgj6c9gr00gfkm116zahvdzhwak6kcbx")))
+         ("x86_64-linux" "0wkmiyspfdy8ks5zn23hq84a6xya4fnp06hcvlxispfsvld9d3yp")
+         ("aarch64-linux" "1vip0jkw6h3n6kj6vsfqc1db4lkrz3dz0wxs8i9mdrfgvgdwjs2k")))
 
 (define-public elvish
                (package
                  (name "elvish")
-                 (version "0.20.1")
+                 (version "0.21.0")
                  (source (origin
                            (method url-fetch/tarbomb)
                            (uri (elvish-url version))
