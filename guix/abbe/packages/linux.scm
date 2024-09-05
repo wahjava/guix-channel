@@ -219,7 +219,7 @@ stable, responsive and smooth desktop experience.")))
                                 (source  (package-source linux-xanmod-ng-v4))
                                 (version (package-version linux-xanmod-ng-v4))))
 
-(define zfs-226
+(define-public zfs-226
   (package/inherit zfs
     (version "2.2.6")
     (source
