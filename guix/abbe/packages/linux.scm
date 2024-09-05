@@ -219,12 +219,23 @@ stable, responsive and smooth desktop experience.")))
                                 (source  (package-source linux-xanmod-ng-v4))
                                 (version (package-version linux-xanmod-ng-v4))))
 
+(define zfs-226
+  (package/inherit zfs
+    (version "2.2.6")
+    (source
+     (origin
+       (method url-fetch)
+       (uri (string-append "https://github.com/openzfs/zfs/releases"
+                           "/download/zfs-" version
+                           "/zfs-" version ".tar.gz"))
+       (sha256
+        (base32 "19x2a8k25i3y6nr7nx5aaqrpnp55vjmrw86p06zpgpf578804bn9"))))))
 
 (define-public zfs-xanmod-ng
-   (package/inherit zfs
+  (package/inherit zfs-226
     (arguments
-      (cons* #:linux linux-xanmod-ng-v4
-             (package-arguments zfs)))))
+     (cons* #:linux linux-xanmod-ng-v4
+            (package-arguments zfs-226)))))
 
 (define-public zfs-auto-snapshot-xanmod-ng
    (package/inherit
