@@ -176,21 +176,21 @@ stable, responsive and smooth desktop experience.")))
                   (file-name "ddcci-fix-on-6-10.patch"))))
     (package-with-extra-patches ddcci-driver-linux (list fix-610-patch))))
 
-(define-public ddcci-xanmod-ng-v3
-  (package/inherit
-   ddcci-driver-linux-patched
-   (arguments
-    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng-v3)
-       linux-xanmod-ng-v3)))))
+;; (define-public ddcci-xanmod-ng-v3
+;;   (package/inherit
+;;    ddcci-driver-linux-patched
+;;    (arguments
+;;     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+;;       ((#:linux original-linux linux-xanmod-ng-v3)
+;;        linux-xanmod-ng-v3)))))
 
-(define-public ddcci-xanmod-ng-v4
-  (package/inherit
-   ddcci-driver-linux-patched
-   (arguments
-    (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng-v4)
-       linux-xanmod-ng-v4)))))
+;; (define-public ddcci-xanmod-ng-v4
+;;   (package/inherit
+;;    ddcci-driver-linux-patched
+;;    (arguments
+;;     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
+;;       ((#:linux original-linux linux-xanmod-ng-v4)
+;;        linux-xanmod-ng-v4)))))
 
 (define-public bpftool-xanmod-ng
                (package/inherit bpftool
