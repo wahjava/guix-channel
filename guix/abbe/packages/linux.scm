@@ -205,8 +205,9 @@ stable, responsive and smooth desktop experience.")))
 (define-public zfs-xanmod-ng
   (package/inherit zfs
     (arguments
-     (cons* #:linux linux-xanmod-ng-v4
-            (package-arguments zfs)))))
+     (substitute-keyword-arguments (package-arguments zfs)
+       ((#:linux original-linux linux-xanmod-ng-v4)
+        linux-xanmod-ng-v4)))))
 
 (define-public zfs-auto-snapshot-xanmod-ng
    (package/inherit
