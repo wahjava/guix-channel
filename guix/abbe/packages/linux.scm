@@ -160,28 +160,11 @@ stable, responsive and smooth desktop experience.")))
                      #:name "linux-xanmod-ng"
                      #:xanmod-defconfig "config_x86-64-v4"))
 
-(define tuxedo-keyboard-update
-  (let ((fix-patch
-          (origin (method url-fetch)
-                  (uri "https://www.lostca.se/~abbe/tuxedo-keyboard-4.6.1.patch")
-                  (sha256 (base32 "1mg74nc7rhhbmcm45n86jl05y6vfhz35j4sqw5m4azg4hbig0q1a"))
-                  (file-name "tuxedo-keyboard-fix.patch"))))
-    (package-with-extra-patches (package/inherit tuxedo-keyboard
-                                    (name "tuxedo-keyboard")
-                                    (version "4.6.1")
-                                    (source (origin (method git-fetch)
-                                                    (uri (git-reference
-                                                           (url "https://gitlab.com/tuxedocomputers/development/packages/tuxedo-drivers.git")
-                                                           (commit (string-append "v" version))))
-                                                    (file-name (git-file-name name version))
-                                                    (sha256 (base32 "0hbqk28qi3yxw0g3j8yarsplyigpd8kgliri7c48d3yhliiiz7l5")))))
-                                (list fix-patch))))
-
 (define-public lkm-tuxedo-keyboard-xanmod-ng
    (package/inherit
-    tuxedo-keyboard-update
+    tuxedo-keyboard
     (arguments
-     (substitute-keyword-arguments (package-arguments tuxedo-keyboard-update)
+     (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
        ((#:linux original-linux linux-xanmod-ng-v3)
         linux-xanmod-ng-v3)))))
 
