@@ -32,6 +32,26 @@
   (define kernel-source
     (%upstream-linux-source (version-major+minor version) kernel-hash))
 
+  (define bore-patches
+    (let ((linux-xanmod-bore-base-url "https://raw.githubusercontent.com/micros24/linux-xanmod-bore/refs/heads/6.10/"))
+      (list (origin
+              (method url-fetch)
+              (uri (string-append linux-xanmod-bore-base-url "0001-bore.patch"))
+              (file-name "linux6.10.y-bore5.2.11.patch")
+              (sha256 (base32 "1wfw5yypn5hc3yiq2qmqan5h5zpr4yspzz7hf282q2d437rm3ns9")))
+
+            (origin
+              (method url-fetch)
+              (uri (string-append linux-xanmod-bore-base-url "0002-glitched-cfs.patch"))
+              (file-name "glitched-cfs.patch")
+              (sha256 (base32 "0wl86q7bnjar771zp34v6f7qzw2hpbv7aiya6p66y5a23375hchz")))
+
+            (origin
+              (method url-fetch)
+              (uri (string-append linux-xanmod-bore-base-url "0003-glitched-eevdf-additions.patch"))
+              (file-name "glitched-eevdf-additions.patch")
+              (sha256 (base32 "16brb10kxr35siq93jjjgv8v68scnmkn2brpldn2g8fbzkk0ixbq"))))))
+
   (define xanmod-patch
     (origin
       (method url-fetch)
@@ -46,20 +66,33 @@
     (modules '((guix build utils)))
     (snippet
      #~(begin
-         (let* ((xz-name (basename #+xanmod-patch))
-                (patch-xz-name (string-append (string-drop-right xz-name 3)
-                                              ".patch.xz"))
-                (patch-name (string-drop-right patch-xz-name 3)))
-           (copy-file #+xanmod-patch patch-xz-name)
-           (invoke #+(file-append xz "/bin/unxz") patch-xz-name)
-           (invoke #+(file-append patch "/bin/patch")
-                   "--force" "--no-backup-if-mismatch"
-                   #+@(origin-patch-flags kernel-source)
-                   "--input" patch-name)
-           (for-each delete-file
-                     (list patch-name
-                           ;; EXTRAVERSION is used instead.
-                           "localversion")))))))
+         (let ((apply-patch
+                (lambda (orig-patch-name)
+                  (let* ((patch-base-name (basename orig-patch-name))
+                         (patch-name
+                          (if (string-suffix? ".xz" patch-base-name)
+                              (let* ((patch-xz-name (string-append (string-drop-right patch-base-name 3)
+                                                                   ".patch.xz"))
+                                     (uncompressed-patch-name (string-drop-right patch-xz-name 3)))
+                                (copy-file orig-patch-name patch-xz-name)
+                                (invoke #+(file-append xz "/bin/unxz") patch-xz-name)
+                                uncompressed-patch-name)
+
+                              (begin
+                                (copy-file orig-patch-name patch-base-name)
+                                patch-base-name))))
+
+                    (invoke #+(file-append patch "/bin/patch")
+                            "--force" "--no-backup-if-mismatch"
+                            #+@(origin-patch-flags kernel-source)
+                            "--input" patch-name)
+
+                    (delete-file patch-name)))))
+
+           (for-each apply-patch
+                     (list #+@(cons xanmod-patch bore-patches)))
+
+           (delete-file "localversion"))))))
 
 (define* (make-linux-xanmod version xanmod-revision source
                             #:key
@@ -114,6 +147,7 @@
                                     ("CONFIG_FUNCTION_PROFILER" . #t)
                                     ("CONFIG_FUNCTION_GRAPH_TRACER" . #t)
                                     ("CONFIG_FUNCTION_TRACER" . #t)
+                                    ("CONFIG_SCHED_BORE" . #t)
                                     ("CONFIG_FTRACE" . #t))))))
                   (display extra-configuration port)
                   (close-port port))
@@ -135,15 +169,15 @@ distribution with custom settings and new features.  It's built to provide a
 stable, responsive and smooth desktop experience.")))
 
 ;; Linux-XanMod sources
-(define-public linux-xanmod-ng-version "6.11.0")
+(define-public linux-xanmod-ng-version "6.10.11")
 (define-public linux-xanmod-ng-revision "xanmod1")
 (define-public linux-xanmod-ng-source
   (make-linux-xanmod-source
    linux-xanmod-ng-version
    linux-xanmod-ng-revision
-   #:xanmod-branch "edge"
-   #:kernel-hash (base32 "0bnbvadm4wvnwzcq319gsgl03ijvvljn7mj8qw87ihpb4p0cdljm")
-   #:xanmod-hash (base32 "026b0w7kq6prqbvwl2z7hmamlm6qq0zjsk03lzv1k8a7m5gsrgza")))
+   #:xanmod-branch "main"
+   #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
+   #:xanmod-hash (base32 "0zasbiiwb2wli2w3qqg4fp9gp312g2n85g2qwzyr3fabnqf7h4sh")))
 
 ;; Linux-XanMod packages
 (define-public linux-xanmod-ng-v3
