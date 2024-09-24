@@ -30,7 +30,7 @@
            ("out" "/lib/slack") "mesa" "libxkbcommon" "gtk+" "libxext")))
     (package
      (name "slack-desktop")
-     (version "4.39.90")
+     (version "4.40.128")
      (source (origin
               (method url-fetch)
               (uri
@@ -38,7 +38,7 @@
                 "https://downloads.slack-edge.com/desktop-releases/linux/x64/"
                 version "/" name "-" version "-amd64.deb"))
               (sha256
-               (base32 "00ygbka304xnh99s17hh51lxjdkv2flh6nmn143dkj7qqabgrll8"))))
+               (base32 "1p7ybwrsfy5iq5ggpz1p4mx58ilwzsvn7k149i5ifi0zifahwwdg"))))
      (build-system chromium-binary-build-system)
      (arguments
       (list
