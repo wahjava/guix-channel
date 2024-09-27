@@ -231,12 +231,20 @@ stable, responsive and smooth desktop experience.")))
         linux-xanmod-ng2-v3)))))
 
 (define ddcci-driver-linux-patched
-  (let ((fix-610-patch
+  (let ((fix-611-patch
           (origin (method url-fetch)
-                  (uri "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/16.patch")
-                  (sha256 (base32 "01nia9a5gd0d2k0f0gnms46zaxprs310h7v132jsrf5xmlzslhrn"))
-                  (file-name "ddcci-fix-on-6-10.patch"))))
-    (package-with-extra-patches ddcci-driver-linux (list fix-610-patch))))
+                  (uri "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux/-/merge_requests/17.patch")
+                  (sha256 (base32 "1basj6nqpmdbbbrlf2j48kfcgswy1ci7vmywg4wm785mrs618vjx"))
+                  (file-name "ddcci-fix-on-6-11.patch")))
+        (ddcci-driver-linux
+          (package/inherit ddcci-driver-linux
+            (source (origin
+                     (method git-fetch)
+                     (uri (git-reference
+                            (url "https://gitlab.com/ddcci-driver-linux/ddcci-driver-linux")
+                            (commit "0233e1ee5eddb4b8a706464f3097bad5620b65f4")))
+                     (sha256 (base32 "1kszs2b6p0brzpc4nah0606hxssg7qka337bkhgff4qlvy7fijrs")))))))
+    (package-with-extra-patches ddcci-driver-linux (list fix-611-patch))))
 
 (define-public ddcci-xanmod-ng-v3
   (package/inherit
