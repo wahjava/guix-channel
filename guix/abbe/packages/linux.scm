@@ -24,7 +24,7 @@
 ;;;
 
 (define* (make-linux-xanmod-source version xanmod-revision
-                                   #:key xanmod-branch kernel-hash xanmod-hash)
+                                   #:key xanmod-branch kernel-hash xanmod-hash bore)
 
   (define %upstream-linux-source
     (@@ (gnu packages linux) %upstream-linux-source))
@@ -34,23 +34,24 @@
 
   (define bore-patches
     (let ((linux-xanmod-bore-base-url "https://raw.githubusercontent.com/micros24/linux-xanmod-bore/refs/heads/6.10/"))
-      (list (origin
-              (method url-fetch)
-              (uri (string-append linux-xanmod-bore-base-url "0001-bore.patch"))
-              (file-name "linux6.10.y-bore5.2.11.patch")
-              (sha256 (base32 "1wfw5yypn5hc3yiq2qmqan5h5zpr4yspzz7hf282q2d437rm3ns9")))
+      (if (not bore) (list)
+        (list (origin
+                (method url-fetch)
+                (uri (string-append linux-xanmod-bore-base-url "0001-bore.patch"))
+                (file-name "linux6.10.y-bore5.2.11.patch")
+                (sha256 (base32 "1wfw5yypn5hc3yiq2qmqan5h5zpr4yspzz7hf282q2d437rm3ns9")))
 
-            (origin
-              (method url-fetch)
-              (uri (string-append linux-xanmod-bore-base-url "0002-glitched-cfs.patch"))
-              (file-name "glitched-cfs.patch")
-              (sha256 (base32 "0wl86q7bnjar771zp34v6f7qzw2hpbv7aiya6p66y5a23375hchz")))
+              (origin
+                (method url-fetch)
+                (uri (string-append linux-xanmod-bore-base-url "0002-glitched-cfs.patch"))
+                (file-name "glitched-cfs.patch")
+                (sha256 (base32 "0wl86q7bnjar771zp34v6f7qzw2hpbv7aiya6p66y5a23375hchz")))
 
-            (origin
-              (method url-fetch)
-              (uri (string-append linux-xanmod-bore-base-url "0003-glitched-eevdf-additions.patch"))
-              (file-name "glitched-eevdf-additions.patch")
-              (sha256 (base32 "16brb10kxr35siq93jjjgv8v68scnmkn2brpldn2g8fbzkk0ixbq"))))))
+              (origin
+                (method url-fetch)
+                (uri (string-append linux-xanmod-bore-base-url "0003-glitched-eevdf-additions.patch"))
+                (file-name "glitched-eevdf-additions.patch")
+                (sha256 (base32 "16brb10kxr35siq93jjjgv8v68scnmkn2brpldn2g8fbzkk0ixbq")))))))
 
   (define xanmod-patch
     (origin
@@ -176,8 +177,20 @@ stable, responsive and smooth desktop experience.")))
    linux-xanmod-ng-version
    linux-xanmod-ng-revision
    #:xanmod-branch "main"
+   #:bore #f
    #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
    #:xanmod-hash (base32 "0zasbiiwb2wli2w3qqg4fp9gp312g2n85g2qwzyr3fabnqf7h4sh")))
+
+(define-public linux-xanmod-ng2-version "6.11.0")
+(define-public linux-xanmod-ng2-revision "xanmod1")
+(define-public linux-xanmod-ng2-source
+  (make-linux-xanmod-source
+   linux-xanmod-ng2-version
+   linux-xanmod-ng2-revision
+   #:xanmod-branch "edge"
+   #:bore #t
+   #:kernel-hash (base32 "0bnbvadm4wvnwzcq319gsgl03ijvvljn7mj8qw87ihpb4p0cdljm")
+   #:xanmod-hash (base32 "026b0w7kq6prqbvwl2z7hmamlm6qq0zjsk03lzv1k8a7m5gsrgza")))
 
 ;; Linux-XanMod packages
 (define-public linux-xanmod-ng-v3
@@ -194,13 +207,28 @@ stable, responsive and smooth desktop experience.")))
                      #:name "linux-xanmod-ng"
                      #:xanmod-defconfig "config_x86-64-v4"))
 
+(define-public linux-xanmod-ng2-v3
+  (make-linux-xanmod linux-xanmod-ng2-version
+                     linux-xanmod-ng2-revision
+                     linux-xanmod-ng2-source
+                     #:name "linux-xanmod-ng"
+                     #:xanmod-defconfig "config_x86-64-v3"))
+
+(define-public linux-xanmod-ng2-v4
+  (make-linux-xanmod linux-xanmod-ng2-version
+                     linux-xanmod-ng2-revision
+                     linux-xanmod-ng2-source
+                     #:name "linux-xanmod-ng"
+                     #:xanmod-defconfig "config_x86-64-v4"))
+
+
 (define-public lkm-tuxedo-keyboard-xanmod-ng
    (package/inherit
     tuxedo-keyboard
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
-       ((#:linux original-linux linux-xanmod-ng-v3)
-        linux-xanmod-ng-v3)))))
+       ((#:linux original-linux linux-xanmod-ng2-v3)
+        linux-xanmod-ng2-v3)))))
 
 (define ddcci-driver-linux-patched
   (let ((fix-610-patch
@@ -215,16 +243,16 @@ stable, responsive and smooth desktop experience.")))
    ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng-v3)
-       linux-xanmod-ng-v3)))))
+      ((#:linux original-linux linux-xanmod-ng2-v3)
+       linux-xanmod-ng2-v3)))))
 
 (define-public ddcci-xanmod-ng-v4
   (package/inherit
    ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng-v4)
-       linux-xanmod-ng-v4)))))
+      ((#:linux original-linux linux-xanmod-ng2-v4)
+       linux-xanmod-ng2-v4)))))
 
 (define-public bpftool-xanmod-ng
                (package/inherit bpftool
@@ -236,12 +264,17 @@ stable, responsive and smooth desktop experience.")))
                                 (source  (package-source linux-xanmod-ng-v4))
                                 (version (package-version linux-xanmod-ng-v4))))
 
+(define-public bpftool-xanmod-ng2-v4
+               (package/inherit bpftool
+                                (source  (package-source linux-xanmod-ng2-v4))
+                                (version (package-version linux-xanmod-ng2-v4))))
+
 (define-public zfs-xanmod-ng
   (package/inherit zfs
     (arguments
      (substitute-keyword-arguments (package-arguments zfs)
-       ((#:linux original-linux linux-xanmod-ng-v4)
-        linux-xanmod-ng-v4)))))
+       ((#:linux original-linux linux-xanmod-ng2-v4)
+        linux-xanmod-ng2-v4)))))
 
 (define-public zfs-auto-snapshot-xanmod-ng
    (package/inherit
