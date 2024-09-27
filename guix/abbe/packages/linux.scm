@@ -177,7 +177,7 @@ stable, responsive and smooth desktop experience.")))
    linux-xanmod-ng-version
    linux-xanmod-ng-revision
    #:xanmod-branch "main"
-   #:bore #f
+   #:bore #t
    #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
    #:xanmod-hash (base32 "0zasbiiwb2wli2w3qqg4fp9gp312g2n85g2qwzyr3fabnqf7h4sh")))
 
@@ -188,7 +188,7 @@ stable, responsive and smooth desktop experience.")))
    linux-xanmod-ng2-version
    linux-xanmod-ng2-revision
    #:xanmod-branch "edge"
-   #:bore #t
+   #:bore #f
    #:kernel-hash (base32 "0bnbvadm4wvnwzcq319gsgl03ijvvljn7mj8qw87ihpb4p0cdljm")
    #:xanmod-hash (base32 "026b0w7kq6prqbvwl2z7hmamlm6qq0zjsk03lzv1k8a7m5gsrgza")))
 
