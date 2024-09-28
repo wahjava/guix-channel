@@ -27,9 +27,7 @@
      "Tailscale is a zero config VPN for building secure networks. Install on any device in minutes. Remote access from any network or physical location.")
     (license license:bsd-3)
     (arguments
-     `(#:goarch "arm64"
-       #:goos "linux"
-       #:go ,go-1.23
+     `(#:go ,go-1.23
        #:sub-packages '("./cmd/tailscaled")
        #:tags '("ts_include_cli")
        #:vendor-hash "1wfsk0z43aqi1i2ymhlhzziqc2a96bf2sydg8ppkafw6rl32148w"
