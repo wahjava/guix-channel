@@ -127,8 +127,6 @@
                        (outputs '("out"))
                        (search-paths '())
                        (install-source? #f)
-                       (import-path "")
-                       (unpack-path "")
                        (build-flags ''())
                        (tests? #t)
                        (parallel-build? #t)
@@ -140,7 +138,7 @@
                        (goos #f)
                        (ldflags #f)
                        (tags #f)
-                       (sub-packages '())
+                       (sub-packages '("."))
                        (guile #f)
                        (imported-modules %nix-go-build-system-modules)
                        (modules '((abbe build nix-go-build-system)
@@ -163,13 +161,11 @@
                         #:goos #$goos
                         #:ldflags #$ldflags
                         #:tags #$tags
-                        #:sub-packages #$sub-packages
+                        #:sub-packages (list #$@sub-packages)
                         #:search-paths '#$(sexp->gexp
                                            (map search-path-specification->sexp
                                                 search-paths))
                         #:install-source? #$install-source?
-                        #:import-path #$import-path
-                        #:unpack-path #$unpack-path
                         #:build-flags #$build-flags
                         #:tests? #$tests?
                         #:parallel-build? #$parallel-build?
