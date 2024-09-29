@@ -1,42 +1,31 @@
 (define-module (abbe packages flyctl)
   #:use-module (guix packages)
-  #:use-module (gnu packages linux)
+  #:use-module (guix git-download)
   #:use-module (guix gexp)
-  #:use-module (guix build-system copy)
-  #:use-module (guix download)
-  #:use-module (guix licenses)
-  #:use-module (guix base16)
-  #:use-module (ice-9 match))
-
-(define (flyctl-arch system)
-  (match system
-    ("aarch64-linux" "arm64")
-    ("x86_64-linux" "x86_64")))
-
-(define (flyctl-url version system)
-  (let ([system (flyctl-arch system)])
-    (string-append "https://github.com/superfly/flyctl/releases/download/v" version
-		   "/flyctl_" version "_Linux_" system ".tar.gz")))
-
-(define (flyctl-hash system)
-  (match system
-    ("aarch64-linux" "049d666d26f916ae636b752defb3a705e7ba055ecef014399ea5ac766a1bb1e1")
-    ("x86_64-linux" "3afb88f7c65aed434c40befac984eacc081e2b328500255c5095a5f6abd86f7b")))
+  #:use-module (abbe build-system nix-go)
+  #:use-module (gnu packages golang)
+  #:use-module ((guix licenses) #:prefix license:))
 
 (define-public flyctl
   (package
    (name "flyctl")
-   (version "0.2.99")
+   (version "0.3.12")
    (source (origin
-            (method url-fetch/tarbomb)
-            (uri (flyctl-url version (%current-system)))
-            (sha256 (base16-string->bytevector (flyctl-hash (%current-system))))))
-   (build-system copy-build-system)
+            (method git-fetch)
+            (uri (git-reference
+                  (url "https://github.com/superfly/flyctl")
+                  (commit (string-append "v" version))))
+            (sha256 (base32 "1fh9al65cj07wfr504vzqxr5zcv9qsqq32jr1pcvlmvmcw4vr9p6"))))
+   (build-system nix-go-build-system)
    (arguments
-    `(#:install-plan
-      ,#~(list '("flyctl" "bin/"))))
+    `(#:go ,go-1.22
+      #:ldflags '("-X"
+                  "github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
+                  "-X"
+                  "github.com/superfly/flyctl/internal/buildinfo.branchName=master")
+     #:vendor-hash "0g5ivrak5vj4kb2knc3ww4i5m1r1xbkgga5dz3gdbkrcc2mr2njz"))
    (synopsis "Command line tools for fly.io services")
    (description
     "flyctl is a command-line interface for fly.io")
    (home-page "https://fly.io")
-   (license asl2.0)))
+   (license license:asl2.0)))
