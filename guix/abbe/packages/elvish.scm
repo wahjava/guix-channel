@@ -1,6 +1,5 @@
 (define-module (abbe packages elvish)
   #:use-module (guix packages)
-  #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (abbe packages go)
   #:use-module (abbe build-system nix-go)
