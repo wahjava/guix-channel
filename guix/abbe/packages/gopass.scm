@@ -1,44 +1,50 @@
 (define-module (abbe packages gopass)
-  #:use-module (gnu packages)
   #:use-module (guix packages)
   #:use-module (guix gexp)
-  #:use-module (nonguix build-system binary)
-  #:use-module (guix download)
-  #:use-module (ice-9 match)
-  #:use-module (guix licenses))
-
-(define (gopass-arch system)
-  (match system
-    ("aarch64-linux" "linux-arm64")
-    ("x86_64-linux" "linux-amd64")))
-
-(define (gopass-url version system)
-  (let ([system (gopass-arch system)])
-    (string-append
-     "https://github.com/gopasspw/gopass/releases/download/v" version "/gopass-" version "-" system ".tar.gz")))
-
-(define (gopass-hash system)
-  (match system
-    ("aarch64-linux" "0gaqk8z4sb4gbnicmhznqmar1b7r39vjvb2bddnpn1w1dwxyhp33")
-    ("x86_64-linux" "0gssd4yqz1kbf8yf723b6l03lr0kfm1f0qk0p1krvf5fxmq8xabs")))
+  #:use-module (abbe build-system nix-go)
+  #:use-module (guix git-download)
+  #:use-module (gnu packages golang)
+  #:use-module ((guix licenses) #:prefix license:))
 
 (define-public gopass
   (package
-   (name "gopass")
-   (version "1.15.14")
-   (source (origin
-            (method url-fetch/tarbomb)
-            (uri (gopass-url version (%current-system)))
-            (sha256 (base32 (gopass-hash (%current-system))))))
-   (build-system binary-build-system)
-   (arguments
-    '(#:install-plan
-      '(("gopass" "bin/gopass")
-	("zsh.completion" "share/zsh/site-functions/_gopass")
-	("bash.completion" "share/bash-completion/completions/gopass")
-	("fish.completion" "share/fish/vendor_completions.d/gopass.fish"))))
+    (name "gopass")
+    (version "1.15.14")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/gopasspw/gopass")
+                    (commit (string-append "v" version))))
+              (sha256 (base32 "1v7yjlhfr1wjqf3i685v7zv192lvhr3r08ja72gz3cmp6lgdv1fy"))))
+    (build-system nix-go-build-system)
+    (arguments
+     `(#:go ,go-1.22
+       #:vendor-hash "1gfwj3mcfsdlxaykq8yvv2qs9icjhxc7yld848ccj4qn49dnkshr"
+       #:tags '("netgo")
+       #:ldflags
+       (list "-s" "-w"
+             "-X"
+             ,(string-append "main.version=" version)
+             "-X"
+             ,(string-append "main.commit=" version)
+             "-X"
+             "main.date=1970-01-01")
+       #:phases
+       ,#~(modify-phases %standard-phases
+           (add-after 'install 'install-shell-completions
+             (lambda* (#:key outputs #:allow-other-keys)
+               (let ((comps '(("zsh.completion" . "share/zsh/site-functions/_gopass")
+	                            ("bash.completion" . "share/bash-completion/completions/gopass")
+	                            ("fish.completion" . "share/fish/vendor_completions.d/gopass.fish")))
+                     (out (assoc-ref outputs "out")))
+                 (for-each (lambda (comp)
+                             (let ((file (string-append out "/" (cdr comp))))
+                               (mkdir-p (dirname file))
+                               (copy-file (car comp)
+                                          file)))
+                           comps)))))))
 
-   (synopsis "The slightly more awesome standard unix password manager for teams")
-   (description "The slightly more awesome standard unix password manager for teams")
-   (home-page "https://gopass.pw")
-   (license expat)))
+     (synopsis "The slightly more awesome standard unix password manager for teams")
+     (description "The slightly more awesome standard unix password manager for teams")
+     (home-page "https://gopass.pw")
+     (license license:expat)))
