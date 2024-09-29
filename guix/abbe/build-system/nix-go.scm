@@ -31,7 +31,7 @@
 
 (define* (lower name
                 #:key source inputs native-inputs outputs system target
-                (go (if (supported-package? (default-go))
+                (go (if (pkgs:supported-package? (default-go))
                         (default-go)
                         (default-gccgo)))
                 (vendor-hash #f)
