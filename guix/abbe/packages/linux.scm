@@ -170,7 +170,7 @@ distribution with custom settings and new features.  It's built to provide a
 stable, responsive and smooth desktop experience.")))
 
 ;; Linux-XanMod sources
-(define-public linux-xanmod-ng-version "6.10.11")
+(define-public linux-xanmod-ng-version "6.10.12")
 (define-public linux-xanmod-ng-revision "xanmod1")
 (define-public linux-xanmod-ng-source
   (make-linux-xanmod-source
@@ -179,9 +179,9 @@ stable, responsive and smooth desktop experience.")))
    #:xanmod-branch "main"
    #:bore #t
    #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
-   #:xanmod-hash (base32 "0zasbiiwb2wli2w3qqg4fp9gp312g2n85g2qwzyr3fabnqf7h4sh")))
+   #:xanmod-hash (base32 "0ppcc0f394g1ph67v0f6a8g8lwc3g497cki3q610318ma8wdn1p2")))
 
-(define-public linux-xanmod-ng2-version "6.11.0")
+(define-public linux-xanmod-ng2-version "6.11.1")
 (define-public linux-xanmod-ng2-revision "xanmod1")
 (define-public linux-xanmod-ng2-source
   (make-linux-xanmod-source
@@ -190,7 +190,7 @@ stable, responsive and smooth desktop experience.")))
    #:xanmod-branch "edge"
    #:bore #f
    #:kernel-hash (base32 "0bnbvadm4wvnwzcq319gsgl03ijvvljn7mj8qw87ihpb4p0cdljm")
-   #:xanmod-hash (base32 "026b0w7kq6prqbvwl2z7hmamlm6qq0zjsk03lzv1k8a7m5gsrgza")))
+   #:xanmod-hash (base32 "1c2x7rjgfpn32j45yysda2gp1dds4nqps2kvag2ai54gdab87x3k")))
 
 ;; Linux-XanMod packages
 (define-public linux-xanmod-ng-v3
