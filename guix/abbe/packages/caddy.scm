@@ -1,41 +1,48 @@
 (define-module (abbe packages caddy)
   #:use-module (guix packages)
-  #:use-module (gnu packages linux)
   #:use-module (guix gexp)
-  #:use-module (guix build-system copy)
-  #:use-module (guix download)
+  #:use-module (abbe packages go)
+  #:use-module (abbe build-system nix-go)
+  #:use-module (guix git-download)
   #:use-module ((guix licenses) :prefix license:)
   #:use-module (ice-9 match))
 
-(define (caddy-arch system)
-  (match system
-    ("aarch64-linux" "arm64")
-    ("x86_64-linux" "amd64")))
-
-(define (caddy-url version system)
-  (let ([system (caddy-arch system)])
-    (string-append
-      "https://github.com/caddyserver/caddy/releases/download/v" version "/caddy_" version
-      "_linux_" system ".tar.gz")))
-
-(define (caddy-hash system)
-  (match system
-    ("aarch64-linux" "01dgn8l7ab7bycyxbnfwcsps7xxrdgmj7n66j1jqqrrxi0qyp8wk")
-    ("x86_64-linux" "1j286xfxcrzvgn4k02nnq7n45wdsyz5c0phw6y7gi30kain31s57")))
+(define %empty-hash (make-string 52 #\0))
 
 (define-public caddy
   (package
    (name "caddy")
    (version "2.8.4")
    (source (origin
-            (method url-fetch/tarbomb)
-            (uri (caddy-url version (%current-system)))
-            (sha256 (base32 (caddy-hash (%current-system))))))
-   (build-system copy-build-system)
+            (method git-fetch)
+            (uri (git-reference
+                  (url "https://github.com/caddyserver/caddy")
+                  (commit (string-append "v" version))))
+            (sha256 (base32 "0i3y2w36dvif5jnvpv4c31l1hw1vsyvwb206ccn0dpm9snmg45q8"))))
+   (build-system nix-go-build-system)
    (arguments
     (list
-     #:install-plan
-     #~'(("caddy" "bin/"))))
+     #:go go-122
+     #:sub-packages '("./cmd/caddy")
+     #:ldflags `(list "-X"
+                 ,(string-append "github.com/caddyserver/caddy/v2.CustomVersion=v" version))
+     #:vendor-hash "0lw97bcidr55n2hvzx6apilan92qn241h6afcbl5y9srn3qn42nl"
+     #:phases
+     #~(modify-phases %standard-phases
+         (add-after 'install 'install-manpages-et-al
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let* ((out (assoc-ref outputs "out"))
+                    (bin (string-append out "/bin"))
+                    (mandir (string-append out "/share/man/man8"))
+                    (caddy-exe (string-append bin "/caddy"))
+                    (bashcomp (string-append out "/share/bash-completion/completions")))
+               (mkdir-p mandir)
+               (mkdir-p bashcomp)
+               (invoke caddy-exe "manpage" "--directory" mandir)
+               (call-with-output-file (string-append bashcomp "/caddy")
+                 (lambda (out-port)
+                   (waitpid (spawn caddy-exe (list caddy-exe "completion" "bash")
+                                   #:output out-port))))))))))
    (synopsis "Caddy is a web server")
    (description
     "Fast and extensible multi-platform HTTP/1-2-3 web server with automatic HTTPS")
