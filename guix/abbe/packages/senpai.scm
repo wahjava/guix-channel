@@ -27,7 +27,7 @@
     (license license:expat)
     (native-inputs (list scdoc))
     (arguments
-     `(#:sub-packages '("./cmd/senpai")
+     `(#:sub-packages ("./cmd/senpai")
        #:vendor-hash "1b8cp0g83lv8mg6381m9vrvf1sdb5fmilyci7p3q4d2q3ssvkhgc"
        #:phases
        ,#~(modify-phases %standard-phases
