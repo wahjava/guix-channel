@@ -3,7 +3,7 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (abbe build-system nix-go)
-  #:use-module (gnu packages golang)
+  #:use-module (abbe packages go)
   #:use-module ((guix licenses) #:prefix license:))
 
 (define-public flyctl
@@ -18,7 +18,7 @@
             (sha256 (base32 "1fh9al65cj07wfr504vzqxr5zcv9qsqq32jr1pcvlmvmcw4vr9p6"))))
    (build-system nix-go-build-system)
    (arguments
-    `(#:go ,go-1.22
+    `(#:go ,go-122
       #:ldflags '("-X"
                   "github.com/superfly/flyctl/internal/buildinfo.buildDate=1970-01-01T00:00:00Z"
                   "-X"
