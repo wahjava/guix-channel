@@ -11,6 +11,9 @@
     (setenv "GOCACHE" (string-append tmpdir "/go-cache"))
     (setenv "GOPROXY" "off")
     (setenv "GOSUMDB" "off")
+    (setenv "CGO_ENABLED" "0")
+    (setenv "GO111MODULE" "on")
+    (setenv "GOTOOLCHAIN" "local")
     (setenv "GOOS" goos)
     (setenv "GOARCH" goarch)))
 

@@ -11,10 +11,10 @@
   #:use-module ((guix packages) #:prefix pkgs:)
   #:use-module ((guix build gnu-build-system) #:prefix gnu:)
   #:use-module ((gnu packages certs) #:select (nss-certs))
+  #:use-module ((gnu packages version-control) #:select (git-minimal))
   #:use-module (guix build-system gnu)
   #:export (nix-go-build-system
             nix-go-build
-            go-build
             %standard-phases))
 
 (define %nix-go-build-system-modules
@@ -31,9 +31,7 @@
 
 (define* (lower name
                 #:key source inputs native-inputs outputs system target
-                (go (if (pkgs:supported-package? (default-go))
-                        (default-go)
-                        (default-gccgo)))
+                (go #f)
                 (vendor-hash #f)
                 (ldflags #f)
                 #:allow-other-keys
@@ -54,17 +52,23 @@
                           (guix search-paths))
 
              (setenv "PATH" (cdar (evaluate-search-paths (list $PATH)
-                                                         (list #$@(map cadr (standard-packages))))))
+                                                         (list
+                                                          #$git-minimal #$go-toolchain
+                                                          #$@(map cadr (standard-packages))))))
 
              (setenv "SSL_CERT_DIR" (string-append #$nss-certs "/etc/ssl/certs"))
              (setenv "GOPATH" (string-append tmpdir "/go"))
              (setenv "GOCACHE" (string-append tmpdir "/go-cache"))
+             (setenv "GOPROXY" "")
+             (setenv "GO111MODULE" "on")
+             (setenv "GOTOOLCHAIN" "local")
+             (setenv "CGO_ENABLED" "0")
 
              (invoke "cp" "-r" "--reflink=auto" #$source "modRoot")
              (chdir "modRoot")
              (chmod "." #o755)
-             (invoke (string-append #$go-toolchain "/bin/go")
-                     "mod" "vendor")
+
+             (invoke "go" "mod" "vendor")
              (mkdir-p "vendor")
 
              (invoke "cp" "-r" "--reflink=auto" "vendor" #$output)))
@@ -86,6 +90,11 @@
                  (file-name name)
                  (hash (pkgs:content-hash (nix-base32-string->bytevector vendor-hash) sha256))))
 
+  (define go-toolchain
+    (if go
+        go
+        (default-go)))
+
   (bag
     (name name)
     (system system)
@@ -94,9 +103,9 @@
                           `(("source" ,source))
                           '())
                     ,@(if vendor-hash
-                          `(("vendor" ,(vendor-origin name vendor-hash go)))
+                          `(("vendor" ,(vendor-origin name vendor-hash go-toolchain)))
                           '())
-                    ,@`(("go" ,go))
+                    ,@`(("go" ,go-toolchain))
                     ,@native-inputs
                     ,@(if target
                           ;; Use the standard cross inputs of
