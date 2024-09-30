@@ -3,7 +3,7 @@
   #:use-module (guix gexp)
   #:use-module (abbe build-system nix-go)
   #:use-module (guix git-download)
-  #:use-module (gnu packages golang)
+  #:use-module (abbe packages go)
   #:use-module ((guix licenses) #:prefix license:))
 
 (define-public gopass
@@ -18,7 +18,7 @@
               (sha256 (base32 "1v7yjlhfr1wjqf3i685v7zv192lvhr3r08ja72gz3cmp6lgdv1fy"))))
     (build-system nix-go-build-system)
     (arguments
-     `(#:go ,go-1.22
+     `(#:go ,go-122
        #:vendor-hash "1gfwj3mcfsdlxaykq8yvv2qs9icjhxc7yld848ccj4qn49dnkshr"
        #:tags '("netgo")
        #:ldflags
