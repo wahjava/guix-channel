@@ -26,8 +26,8 @@
 
 (define (default-go)
   ;; Lazily resolve the binding to avoid a circular dependency.
-  (let ((go (resolve-interface '(gnu packages golang))))
-    (module-ref go 'go)))
+  (let ((go (resolve-interface '(abbe packages go))))
+    (module-ref go 'go-122)))
 
 (define* (lower name
                 #:key source inputs native-inputs outputs system target
