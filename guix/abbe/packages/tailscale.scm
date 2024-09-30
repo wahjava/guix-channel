@@ -1,7 +1,7 @@
 (define-module (abbe packages tailscale)
   #:use-module (guix packages)
   #:use-module (gnu packages linux)
-  #:use-module (gnu packages golang)
+  #:use-module (abbe packages go)
   #:use-module (guix gexp)
   #:use-module (abbe build-system nix-go)
   #:use-module (guix git-download)
@@ -27,13 +27,13 @@
      "Tailscale is a zero config VPN for building secure networks. Install on any device in minutes. Remote access from any network or physical location.")
     (license license:bsd-3)
     (arguments
-     `(#:go ,go-1.23
-       #:sub-packages '("./cmd/tailscaled")
+     `(#:go ,go-123
+       #:sub-packages ("./cmd/tailscaled")
        #:tags '("ts_include_cli")
        #:vendor-hash "1wfsk0z43aqi1i2ymhlhzziqc2a96bf2sydg8ppkafw6rl32148w"
        #:ldflags (list "-w" "-s"
-                  (string-append "-X tailscale.com/version.longStamp=" ,(package-version this-package))
-                  (string-append "-X tailscale.com/version.shortStamp=" ,(package-version this-package)))
+                  ,(string-append "-X tailscale.com/version.longStamp=" (package-version this-package))
+                  ,(string-append "-X tailscale.com/version.shortStamp=" (package-version this-package)))
        #:phases
        ,#~(modify-phases %standard-phases
            (add-after 'install 'symlink-tailscale
