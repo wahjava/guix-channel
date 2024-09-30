@@ -2,7 +2,7 @@
   #:use-module (guix packages)
   #:use-module (guix download)
   #:use-module (guix git-download)
-  #:use-module (gnu packages golang)
+  #:use-module (abbe packages go)
   #:use-module (abbe build-system nix-go)
   #:use-module (guix gexp)
   #:use-module ((guix licenses) #:prefix license:))
@@ -23,7 +23,7 @@
     (build-system nix-go-build-system)
     (arguments
      (list
-      #:go go-1.22
+      #:go go-122
       #:vendor-hash "1fpqzpgivivh9j8qdbq2xk1jf64vx5zdxbxmf2wwiv7xrczzadaj"
       #:sub-packages '("./cmd/elvish")))
 
