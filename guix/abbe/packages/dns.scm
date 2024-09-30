@@ -3,44 +3,30 @@
   #:use-module (guix download)
   #:use-module (guix git-download)
   #:use-module (guix base16)
+  #:use-module (guix utils)
+  #:use-module (guix gexp)
   #:use-module (gnu packages networking)
-  #:use-module (gnu packages dns))
+  #:use-module (gnu packages dns)
+  #:use-module (gnu packages python-xyz)
+  #:use-module (gnu packages sphinx))
 
-(define-public knot-3.3.8
-  (package/inherit knot
-    (version "3.3.8")
-    (source
-     (origin
-       (method git-fetch)
-       (uri (git-reference
-             (url "https://gitlab.nic.cz/knot/knot-dns")
-             (commit (string-append "v" version))))
-       (file-name (git-file-name (package-name knot) version))
-       (sha256
-        (base32 "0iaardlmvcp6f0vccs81f202bb53y7fkcw5n12ahgqymqzhafpmq"))
-       (modules '((guix build utils)))
-       (snippet
-        '(begin
-           ;; Remove Ragel-generated C files.  We'll recreate them below.
-           (for-each delete-file (find-files "." "\\.c\\.[gt]."))
-           (delete-file "src/libknot/yparser/ypbody.c")
-           ;; Remove bundled libraries to ensure we always use the system's.
-           (with-directory-excursion "src/contrib"
-             (for-each delete-file-recursively
-                       ;; TODO: package libngtcp2 for DoQ (‘QUIC’) support.
-                       '("libngtcp2")))))))
-    (inputs (modify-inputs (package-inputs knot)
-              (append ngtcp2)))))
-
-(define-public knot-resolver-5.7.4
+(define-public knot-resolver-6
   (package/inherit knot-resolver
-    (version "5.7.4")
-    (inputs (modify-inputs (package-inputs knot-resolver)
-              (replace "knot" (list knot-3.3.8 "lib"))))
+    (version "6.0.8")
+    (native-inputs (cons* (list "python-sphinx-tabs" python-sphinx-tabs)
+                          (list "python-json-schema-for-humans" python-jsonschema)
+                          (package-native-inputs knot-resolver)))
+                                        ;(inputs (modify-inputs (package-inputs knot-resolver)           (replace "knot" (list knot-3.3.8 "lib"))))
+    (arguments
+     (substitute-keyword-arguments (strip-keyword-arguments  '(#:configure-flags) (package-arguments knot-resolver))
+       ((#:phases phases '())
+        #~(modify-phases #$phases
+            (delete 'build-doc)
+            (delete 'move-doc)))))
     (source (origin
               (method url-fetch)
               (uri (string-append "https://secure.nic.cz/files/knot-resolver/"
                                   "knot-resolver-" version ".tar.xz"))
               (sha256
-               (base32
-                "1j6rig8mb4sh11q6cfhqmlsaxw41fwiglkflz8d08a38y3nacvbb"))))))
+               (base16-string->bytevector
+                "ac12f000ab599fd2223e418611e77746da717c6ba27654661fa36c847185a266"))))))
