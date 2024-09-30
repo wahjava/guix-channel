@@ -13,10 +13,11 @@
 (define-public knot-resolver-6
   (package/inherit knot-resolver
     (version "6.0.8")
-    (native-inputs (cons* (list "python-sphinx-tabs" python-sphinx-tabs)
-                          (list "python-json-schema-for-humans" python-jsonschema)
-                          (package-native-inputs knot-resolver)))
-                                        ;(inputs (modify-inputs (package-inputs knot-resolver)           (replace "knot" (list knot-3.3.8 "lib"))))
+    (native-inputs
+      (modify-inputs (package-native-inputs knot-resolver)
+        (delete "python-sphinx" "python-sphinx-rtd-theme"
+                "texinfo" "python-breathe" "doxygen")))
+    (outputs '("out"))
     (arguments
      (substitute-keyword-arguments (strip-keyword-arguments  '(#:configure-flags) (package-arguments knot-resolver))
        ((#:phases phases '())
