@@ -6,8 +6,6 @@
   #:use-module (guix git-download)
   #:use-module (guix licenses))
 
-(define %empty-hash (make-string 52 #\0))
-
 (define-public fzf
   (package
    (name "fzf")
