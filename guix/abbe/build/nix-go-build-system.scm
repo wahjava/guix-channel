@@ -1,6 +1,7 @@
 (define-module (abbe build nix-go-build-system)
   #:use-module (guix build utils)
   #:use-module ((guix build gnu-build-system) #:prefix gnu:)
+  #:use-module (srfi srfi-1)
   #:export (%standard-phases
             nix-go-build))
 
@@ -22,18 +23,21 @@
   (invoke "cp" "-r" "--reflink=auto"
 	        (assoc-ref inputs "vendor") "vendor"))
 
-(define* (build #:key ldflags tags sub-packages #:allow-other-keys)
+(define* (build #:key ldflags tags build-flags sub-packages #:allow-other-keys)
   (let ((tags (if (list? tags)
                   (list (string-append "-tags="
                                        (string-join tags ",")))
                   (list)))
-        (ldflags (if (list? ldflags)
-                     (list "-ldflags"
-                           (string-join ldflags " "))
-                     (list))))
+        (ldflags (list "-ldflags"
+                       (if (list? ldflags)
+                           (string-join (if (every (lambda (el)
+                                                     (not (string-prefix? "-buildid=" el))) ldflags)
+                                            (cons "-buildid=" ldflags)
+                                            ldflags) " ")
+                           "-buildid="))))
     (for-each (lambda (pkg)
                 (apply invoke
-                       `("go" "install" ,@tags ,@ldflags ,pkg)))
+                       `("go" "install" ,@build-flags ,@tags ,@ldflags ,pkg)))
               sub-packages)))
 
 (define* (install #:key outputs #:allow-other-keys)

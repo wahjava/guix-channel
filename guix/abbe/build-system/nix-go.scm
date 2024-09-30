@@ -31,6 +31,7 @@
 
 (define* (lower name
                 #:key source inputs native-inputs outputs system target
+                (build-flags '())
                 (go #f)
                 (vendor-hash #f)
                 (ldflags #f)
@@ -127,7 +128,8 @@
 
     (outputs outputs)
     (build nix-go-build)
-    (arguments (strip-keyword-arguments private-keywords arguments))))
+    (arguments (cons* #:build-flags build-flags
+                      (strip-keyword-arguments private-keywords arguments)))))
 
 (define* (nix-go-build name inputs
                        #:key
@@ -136,7 +138,7 @@
                        (outputs '("out"))
                        (search-paths '())
                        (install-source? #f)
-                       (build-flags ''())
+                       (build-flags '())
                        (tests? #t)
                        (parallel-build? #t)
                        (parallel-tests? #t)
@@ -175,7 +177,7 @@
                                            (map search-path-specification->sexp
                                                 search-paths))
                         #:install-source? #$install-source?
-                        #:build-flags #$build-flags
+                        #:build-flags (list #$@build-flags)
                         #:tests? #$tests?
                         #:parallel-build? #$parallel-build?
                         #:parallel-tests? #$parallel-tests?
