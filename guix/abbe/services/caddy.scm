@@ -32,7 +32,7 @@
     (list
      (shepherd-service
       (provision '(caddy))
-      (requirement '(networking)) ;; services this depends on
+      (requirement '()) ;; services this depends on
       (start #~(make-forkexec-constructor
                 (list #$(file-append caddy "/bin/caddy")
                       "start"
