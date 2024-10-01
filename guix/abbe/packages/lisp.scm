@@ -10,14 +10,14 @@
   (package
    (inherit sbcl)
    (name "sbcl-optimized")
-   (version "2.4.8")
+   (version "2.4.9")
    (source
      (origin
        (method url-fetch)
        (uri (string-append "mirror://sourceforge/sbcl/sbcl/" version "/sbcl-"
                            version "-source.tar.bz2"))
        (sha256
-        (base32 "0k39fyk2dccczrzwvijg9w7pjhaa7360qlwdk55a304fag6csvpw"))
+        (base32 "1qh56rgwg3np2cr26kgrrsagrnawkcnzb8bw9p33v56nqpmy8w4r"))
        (modules '((guix build utils)))
        (snippet
         '(begin
