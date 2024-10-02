@@ -7,19 +7,19 @@
   #:use-module (guix utils)
   #:use-module ((guix licenses) :prefix license:))
 
-(define-public git-2-46-1
-  (let ((version "2.46.1"))
+(define-public git/update
+  (let ((version "2.46.2"))
     (package
       (inherit git)
       (name "git")
       (version version)
       (source (origin
-		            (method url-fetch)
-		            (uri (string-append "mirror://kernel.org/software/scm/git/git-"
-                                    version ".tar.xz"))
-		            (sha256
-		             (base32
-		              "0hzmy1vhiz2w34bjdb633pw8ic0fhnl4100npjzcpd3apnwaz348"))))
+                (method url-fetch)
+                (uri (string-append "mirror://kernel.org/software/scm/git/git-"
+                              version ".tar.xz"))
+                (sha256
+                 (base32
+                  "18rcmvximgyg3v1a9papi9djfamiak0ys5cmgx7ll29nhp3a3s2y"))))
       (arguments
        (substitute-keyword-arguments (package-arguments git)
          ((#:phases phases '%standard-phases)
@@ -37,4 +37,4 @@
                                  "mirror://kernel.org/software/scm/git/"
                                  "git-manpages-" (package-version this-package)
                                  ".tar.xz"))
-                           (sha256 (base32 "0smz24yfdpczr2p03b4d6v3fn93g19gv9z8s0v4fjdx7w2xf8liw")))))))))))))))
+                           (sha256 (base32 "1bn2jifax2w0q4p67qhnb3fwsx9qvqpa0h2c857zs8mnn2cmp6gy")))))))))))))))
