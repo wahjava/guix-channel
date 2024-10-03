@@ -1,35 +1,26 @@
 (define-module (abbe packages lego)
-  #:use-module (guix download)
+  #:use-module (guix git-download)
   #:use-module (guix packages)
-  #:use-module (guix build-system copy)
-  #:use-module (ice-9 match)
+  #:use-module (abbe build-system nix-go)
+  #:use-module (abbe packages go)
   #:use-module ((guix licenses) #:prefix license:))
-
-(define (lego-url version)
-  (match (%current-system)
-    ("aarch64-linux"
-     (string-append "https://github.com/go-acme/lego/releases/download/v" version
-                    "/lego_v" version "_linux_arm64.tar.gz"))
-    ("x86_64-linux"
-     (string-append "https://github.com/go-acme/lego/releases/download/v" version
-                    "/lego_v" version "_linux_amd64.tar.gz"))))
-
-(define (lego-hash)
-  (match (%current-system)
-    ("x86_64-linux" "0izvcxxhm93c62diggikaph3v1gdnvvxql9ikrcjrydnyngxaqpk")
-    ("aarch64-linux" "163f7xnh7kyw7hi52spy1rfw22by6xhj6dx34jakbhhmmlmkm75p")))
 
 (define-public lego
   (package
     (name "lego")
-    (version "4.17.4")
-    (source (origin (method url-fetch/tarbomb)
-                    (uri (lego-url version))
-                    (sha256 (base32 (lego-hash)))))
-    (build-system copy-build-system)
+    (version "4.19.0")
+    (source (origin (method git-fetch)
+                    (uri (git-reference
+                          (url "https://github.com/go-acme/lego")
+                          (commit (string-append "v" version))))
+                    (sha256 (base32 "0bdaldmmbkpsy5sxgj10klv99wmg7bf98dc8x7kzcvxgrpp51bin"))))
+    (build-system nix-go-build-system)
     (arguments
-     `(#:install-plan
-       '(("lego" "bin/lego"))))
+     `(#:vendor-hash "006vkz1naxsvkbzqk141fqk30js90f6a6jyvpryrlx2hkkr3zh85"
+       #:sub-packages ("./cmd/lego")
+       #:go ,go-123
+       #:build-flags ("-trimpath")
+       #:ldflags (list "-s" "-w" "-X" ,(string-append "main.version=" version))))
     (home-page "https://go-acme.github.io/lego/")
     (synopsis "Let's Encrypt/ACME client and library written in Go")
     (description "Let's Encrypt client and ACME library written in Go.")
