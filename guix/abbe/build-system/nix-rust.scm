@@ -268,7 +268,6 @@
                        (imported-modules %nix-rust-build-system-modules)
                        (modules '((abbe build nix-rust-build-system)
                                   (guix build utils)))
-
                        (substitutable? #t))
 
   (define builder

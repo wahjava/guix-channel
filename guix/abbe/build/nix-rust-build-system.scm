@@ -5,8 +5,9 @@
   #:export (%standard-phases
             nix-rust-build))
 
-(define* (configure #:key inputs rust-target cc env-vars #:allow-other-keys)
-  (let ((vendor (assoc-ref inputs "vendor")))
+(define* (configure #:key inputs rust-target cc env-vars parallel-build? #:allow-other-keys)
+  (let ((vendor (assoc-ref inputs "vendor"))
+        (source (assoc-ref inputs "source")))
 
     (mkdir-p ".cargo")
     (call-with-output-file ".cargo/config.toml"
@@ -21,13 +22,20 @@
     (setenv "CC" cc)
     (setenv "CARGO_HOME" (string-append (getenv "TMPDIR") "/.cargo"))
     (setenv "CARGO_VENDOR_DIR" vendor)
+    (setenv "CARGO_MANIFEST_DIR" source)
+    (setenv "CARGO_BUILD_TARGET" rust-target)
+    (setenv "RUST_BACKTRACE" "1")
+
+    (when parallel-build?
+      (setenv "CARGO_BUILD_JOBS" (number->string (parallel-job-count))))
+
     (invoke "cargo" "update" "--manifest-path" "Cargo.toml" "--verbose")
 
     (for-each (lambda (env) (setenv (car env) (cdr env)))
               env-vars)))
 
 (define* (build #:rest _)
-  (invoke "cargo" "build"))
+  (invoke "cargo" "build" "--release"))
 
 (define* (install #:key outputs #:allow-other-keys)
   (let ((out (assoc-ref outputs "out")))
