@@ -18,10 +18,9 @@
     (setenv "GOOS" goos)
     (setenv "GOARCH" goarch)))
 
-(define* (copy-vendor #:key inputs #:allow-other-keys)
+(define* (symlink-vendor #:key inputs #:allow-other-keys)
   (invoke "rm" "-rf" "vendor")
-  (invoke "cp" "-r" "--reflink=auto"
-	        (assoc-ref inputs "vendor") "vendor"))
+  (symlink (assoc-ref inputs "vendor") "vendor"))
 
 (define* (build #:key ldflags tags build-flags sub-packages #:allow-other-keys)
   (let ((tags (if (list? tags)
@@ -63,4 +62,4 @@
     (replace 'build build)
     (replace 'install install)
     (add-before 'unpack 'setup-nix-go-environment setup-nix-go-environment)
-    (add-after 'patch-source-shebangs 'copy-vendor copy-vendor)))
+    (add-after 'patch-source-shebangs 'symlink-vendor symlink-vendor)))
