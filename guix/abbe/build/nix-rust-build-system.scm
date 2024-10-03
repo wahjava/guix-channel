@@ -37,13 +37,15 @@
 (define* (build #:rest _)
   (invoke "cargo" "build" "--release"))
 
-(define* (install #:key outputs #:allow-other-keys)
+(define* (install #:key outputs cargo-install-paths #:allow-other-keys)
   (let ((out (assoc-ref outputs "out")))
     (mkdir-p out)
-    (invoke "cargo" "install"
-            "--path" "."
-            "--root" out
-            "--verbose")))
+    (for-each (lambda (path)
+                (invoke "cargo" "install"
+                        "--path" path
+                        "--root" out
+                        "--verbose"))
+              cargo-install-paths)))
 
 (define* (delete-crate-metadata #:key outputs #:allow-other-keys)
   (let ((out (assoc-ref outputs "out")))

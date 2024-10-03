@@ -13,7 +13,8 @@
   #:use-module (guix search-paths)
   #:use-module (gnu packages certs)
   #:use-module (gnu packages version-control)
-  #:export (nix-rust-build-system))
+  #:export (nix-rust-build-system
+            %nix-rust-build-system-modules))
 
 (define %rustup-metadata
   (quote (("aarch64-unknown-linux-gnu" (#:target . "aarch64-unknown-linux-gnu") (#:version . "1.81.0") (#:origins ((#:name . "cargo") (#:url . "https://static.rust-lang.org/dist/2024-09-05/cargo-1.81.0-aarch64-unknown-linux-gnu.tar.xz") (#:sha256 . "048vy4k8d5d65vghn3vklarl7630yclrmy8fnr8nrhi395z95y3n")) ((#:name . "rust-std") (#:url . "https://static.rust-lang.org/dist/2024-09-05/rust-std-1.81.0-aarch64-unknown-linux-gnu.tar.xz") (#:sha256 . "1x76xh31djdbajicp5m9b0b24390gxx2idprr278yczfgh1pyml5")) ((#:name . "rustc") (#:url . "https://static.rust-lang.org/dist/2024-09-05/rustc-1.81.0-aarch64-unknown-linux-gnu.tar.xz") (#:sha256 . "1z66s9ifxgpycp1d31h6d4xmr8jy38hypiqamnx2xigq70gna7rh")))) ("x86_64-unknown-linux-gnu" (#:target . "x86_64-unknown-linux-gnu") (#:version . "1.81.0") (#:origins ((#:name . "cargo") (#:url . "https://static.rust-lang.org/dist/2024-09-05/cargo-1.81.0-x86_64-unknown-linux-gnu.tar.xz") (#:sha256 . "0hdq71yb28711pbcp9ha1w77lz6vvmjm8vg360cld5c6msqy83n5")) ((#:name . "rust-std") (#:url . "https://static.rust-lang.org/dist/2024-09-05/rust-std-1.81.0-x86_64-unknown-linux-gnu.tar.xz") (#:sha256 . "0bsnnx3z1jdv0ydj7y9xhn2pib71d3yqkfh8cfaskvp8akr81pvd")) ((#:name . "rustc") (#:url . "https://static.rust-lang.org/dist/2024-09-05/rustc-1.81.0-x86_64-unknown-linux-gnu.tar.xz") (#:sha256 . "0gk1layk7h5ax2qzasc9jpb5iz2vbbg4mv2j1i54zgnfvr64x2lq")))))))
@@ -166,6 +167,7 @@
                 (build-flags '())
                 (env-vars '())
                 (vendor-hash #f)
+                (cargo-install-paths '("."))
                 #:allow-other-keys
                 #:rest arguments)
   "Return a bag for NAME."
@@ -249,6 +251,7 @@
     (outputs outputs)
     (build nix-rust-build)
     (arguments (cons* #:build-flags build-flags
+                      #:cargo-install-paths cargo-install-paths
                       (strip-keyword-arguments private-keywords arguments)))))
 
 (define* (nix-rust-build name inputs
@@ -258,6 +261,7 @@
                        (phases '%standard-phases)
                        (outputs '("out"))
                        (search-paths '())
+                       (cargo-install-paths '("."))
                        (install-source? #f)
                        (build-flags '())
                        (tests? #t)
@@ -290,6 +294,7 @@
                           #:parallel-tests? #$parallel-tests?
                           #:rust-target #$(nix-system->gnu-triplet (%current-system))
                           #:cc #$(cc-for-target)
+                          #:cargo-install-paths (list #$@cargo-install-paths)
                           #:env-vars #$env-vars
                           #:inputs #$(input-tuples->gexp inputs)))))
 
