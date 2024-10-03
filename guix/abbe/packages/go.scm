@@ -10,12 +10,12 @@
   (match (%current-system)
     ("aarch64-linux"
      (match version
-       ("1.22.7" "ed695684438facbd7e0f286c30b7bc2411cfc605516d8127dc25c62fe5b03885")
-       ("1.23.1" "faec7f7f8ae53fda0f3d408f52182d942cc89ef5b7d3d9f23ff117437d4b2d2f")))
+       ("1.22.8" "5c616b32dab04bb8c4c8700478381daea0174dc70083e4026321163879278a4a")
+       ("1.23.2" "f626cdd92fc21a88b31c1251f419c17782933a42903db87a174ce74eeecc66a9")))
     ("x86_64-linux"
      (match version
-       ("1.22.7" "fc5d49b7a5035f1f1b265c17aa86e9819e6dc9af8260ad61430ee7fbe27881bb")
-       ("1.23.1" "49bbb517cfa9eee677e1e7897f7cf9cfdbcf49e05f61984a2789136de359f9bd")))))
+       ("1.22.8" "5f467d29fc67c7ae6468cb6ad5b047a274bae8180cac5e0b7ddbfeba3e47e18f")
+       ("1.23.2" "542d3c1705f1c6a1c5a80d5dc62e2e45171af291e755d591c5e6531ef63b454e")))))
 
 (define (go-file-suffix)
   (match (%current-system)
@@ -36,6 +36,6 @@
     (home-page "https://go.dev")
     (license bsd-3)))
 
-(define-public go-122 (golang "1.22.7"))
+(define-public go-122 (golang "1.22.8"))
 
-(define-public go-123 (golang "1.23.1"))
+(define-public go-123 (golang "1.23.2"))
