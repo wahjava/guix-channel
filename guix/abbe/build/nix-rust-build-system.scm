@@ -24,7 +24,7 @@
     (setenv "CARGO_VENDOR_DIR" vendor)
     (setenv "CARGO_MANIFEST_DIR" source)
     (setenv "CARGO_BUILD_TARGET" rust-target)
-    (setenv "RUST_BACKTRACE" "1")
+    (setenv "RUST_BACKTRACE" "full")
 
     (when parallel-build?
       (setenv "CARGO_BUILD_JOBS" (number->string (parallel-job-count))))
