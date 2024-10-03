@@ -1,57 +1,57 @@
 (define-module (abbe packages yazi)
   #:use-module (gnu packages)
+  #:use-module (gnu packages jemalloc)
   #:use-module (guix packages)
-  #:use-module (gnu packages gcc)
-  #:use-module (gnu packages base)
-  #:use-module (gnu packages compression)
   #:use-module (guix gexp)
   #:use-module (guix utils)
-  #:use-module (nonguix build-system binary)
-  #:use-module (guix download)
-  #:use-module (ice-9 match)
-  #:use-module (guix licenses))
+  #:use-module (abbe build-system nix-rust)
+  #:use-module (guix git-download)
+  #:use-module ((guix licenses) #:prefix license:))
 
-(define yazi-version "0.2.5")
-
-(define (yazi-hash)
-  (match (%current-system)
-    ("aarch64-linux" "1vpgnpz45gw5b7inpdnj7ns005645v19pbrdmn11sg4ff7lrlr0a")
-    ("x86_64-linux" "09mdfrlwx86k8fymxjjnxilxhwfp0g9vx452ybkqc8y4mjls2wxn")))
-
-(define (yazi-filename)
-  (match (%current-system)
-    ("aarch64-linux" "yazi-aarch64-unknown-linux-gnu.zip")
-    ("x86_64-linux"  "yazi-x86_64-unknown-linux-gnu.zip")))
+(define jemalloc/patched
+  (package/inherit jemalloc
+    (arguments
+     (substitute-keyword-arguments (package-arguments jemalloc)
+       ((#:configure-flags flags (list))
+        #~(cons "--with-jemalloc-prefix=_rjem_" #$flags))))))
 
 (define-public yazi
   (package
     (name "yazi")
-    (version yazi-version)
+    (version "0.3.3")
     (source (origin
-              (method url-fetch)
-              (uri (string-append
-                     "https://github.com/sxyazi/yazi/releases/download/v"
-                     version "/" (yazi-filename)))
-	      (sha256 (base32 (yazi-hash)))))
-    (build-system binary-build-system)
-    (native-inputs (list unzip))
+              (method git-fetch)
+              (uri (git-reference (url "https://github.com/sxyazi/yazi")
+                                  (commit (string-append "v" version))))
+	            (sha256 (base32 "08bcyi1jhrip0q2drrkmcfcfbll0aq5nm56fz6w42dw9dgrdyc3d"))))
+    (build-system nix-rust-build-system)
+    (inputs (list jemalloc/patched))
     (arguments
-     `(#:patchelf-plan
-       `(("ya" ("glibc" "gcc"))
-         ("yazi" ("glibc" "gcc")))
-       #:install-plan
-       ,#~(list
-	        (list "ya" "bin/ya")
-	        (list "yazi" "bin/yazi")
-            (list "completions/ya.bash" "etc/bash_compleition.d/")
-            (list "completions/yazi.bash" "etc/bash_compleition.d/")
-            (list "completions/_ya" "share/zsh/site-functions/")
-            (list "completions/_yazi" "share/zsh/site-functions/"))))
-	(inputs
-     (list
-      glibc
-      `(,gcc "lib")))
+     `(#:vendor-hash "12bjkynqikd8n37br78k37fa0xwh8r9bvs4mwk05f4x49invhzlr"
+       #:cargo-install-paths ("./yazi-cli" "./yazi-fm")
+       #:env-vars
+       (list '("VERGEN_GIT_SHA" . "7c445cef1fd9ff9d41314d3d2b02cbc74250c6bf")
+             '("VERGEN_GIT_COMMIT_DATE" . "2024-09-04T15:16:18Z")
+             '("YAZI_GEN_COMPLETIONS" . "true")
+             '("JEMALLOC_SYS_WITH_MALLOC_CONF" . "narenas:1")
+             (cons "JEMALLOC_OVERRIDE"
+                   ,#~(string-append #$@(assoc-ref (package-inputs this-package) "jemalloc")
+                                     "/lib/libjemalloc.so")))
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'install-shell-completions
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((comps '(("_yazi" . "share/zsh/site-functions/_yazi")
+                            ("yazi.bash" . "share/bash-completion/completions/yazi")
+                            ("yazi.fish" . "share/fish/vendor_completions.d/yazi.fish")))
+                   (out (assoc-ref outputs "out")))
+               (for-each (lambda (file)
+                           (install-file
+                            (string-append "./yazi-boot/completions/" (car file))
+                            (string-append out "/" (cdr file))))
+                         comps)))))))
+
     (synopsis "Blazing fast terminal file manager written in Rust, based on async I/O.")
     (description "Yazi (means \"duck\") is a terminal file manager written in Rust, based on non-blocking async I/O. It aims to provide an efficient, user-friendly, and customizable file management experience.")
     (home-page "https://yazi-rs.github.io/")
-    (license expat)))
+    (license license:expat)))
