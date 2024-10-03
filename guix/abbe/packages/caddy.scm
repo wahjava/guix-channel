@@ -7,8 +7,6 @@
   #:use-module ((guix licenses) :prefix license:)
   #:use-module (ice-9 match))
 
-(define %empty-hash (make-string 52 #\0))
-
 (define-public caddy
   (package
    (name "caddy")
