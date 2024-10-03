@@ -254,6 +254,7 @@
 (define* (nix-rust-build name inputs
                        #:key
                        source
+                       (env-vars '(list))
                        (phases '%standard-phases)
                        (outputs '("out"))
                        (search-paths '())
@@ -264,7 +265,6 @@
                        (parallel-tests? #t)
                        (system (%current-system))
                        (guile #f)
-                       (env-vars '())
                        (imported-modules %nix-rust-build-system-modules)
                        (modules '((abbe build nix-rust-build-system)
                                   (guix build utils)))

@@ -7,7 +7,7 @@
 
 (define* (configure #:key inputs rust-target cc env-vars #:allow-other-keys)
   (let ((vendor (assoc-ref inputs "vendor")))
-    
+
     (mkdir-p ".cargo")
     (call-with-output-file ".cargo/config.toml"
       (lambda (cc-toml)
@@ -37,13 +37,20 @@
             "--root" out
             "--verbose")))
 
+(define* (delete-crate-metadata #:key outputs #:allow-other-keys)
+  (let ((out (assoc-ref outputs "out")))
+
+    (for-each delete-file (list (string-append out "/.crates.toml")
+                                (string-append out "/.crates2.json")))))
+
 (define %standard-phases
   (modify-phases gnu:%standard-phases
     (delete 'bootstrap)
     (delete 'check)
     (replace 'configure configure)
     (replace 'build build)
-    (replace 'install install)))
+    (replace 'install install)
+    (add-after 'install 'delete-crate-metadata delete-crate-metadata)))
 
 (define* (nix-rust-build #:key inputs (phases %standard-phases) #:allow-other-keys #:rest args)
   (apply gnu:gnu-build #:inputs inputs #:phases phases args))
