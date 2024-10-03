@@ -28,9 +28,9 @@
    (arguments
     `(#:vendor-hash "1xhznj6cw7nil26qfxx7pawa7vfllhglgbp2jknnc22y3jznm0xv"
       #:env-vars
-      '(("OPENSSL_NO_VENDOR" . "yes")
-        ("LIBSSH2_SYS_USE_PKG_CONFIG" . "yes")
-        ("BUILD_GIT_COMMIT_ID" . "95e1d4d4324bf1eab34f8100afc7f3ae7e435252"))))
+      (list '("OPENSSL_NO_VENDOR" . "yes")
+            '("LIBSSH2_SYS_USE_PKG_CONFIG" . "yes")
+            '("BUILD_GIT_COMMIT_ID" . "95e1d4d4324bf1eab34f8100afc7f3ae7e435252"))))
    (synopsis "Blazing 💥 fast terminal-ui for git written in rust 🦀")
    (description "GitUI provides you with the comfort of a git GUI but right in your terminal")
    (home-page "https://github.com/extrawurst/gitui")
