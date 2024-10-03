@@ -2,40 +2,24 @@
   #:use-module (gnu packages)
   #:use-module (guix packages)
   #:use-module (guix gexp)
-  #:use-module (nonguix build-system binary)
-  #:use-module (guix download)
-  #:use-module (ice-9 match)
-  #:use-module (guix licenses))
-
-(define (mcfly-arch system)
-  (match system
-    ("aarch64-linux" "aarch64")
-    ("x86_64-linux" "x86_64")))
-
-(define (mcfly-url version system)
-  (let ([system (mcfly-arch system)])
-    (string-append
-     "https://github.com/cantino/mcfly/releases/download/v" version "/mcfly-v" version "-" system "-unknown-linux-musl.tar.gz")))
-
-(define (mcfly-hash system)
-  (match system
-    ("aarch64-linux" "112jxqf75izvh04yk5wd4dy6mfi1ws55kqzrhw365d4qk1bb9lh5")
-    ("x86_64-linux" "0fvqr1fyskiajbp401m3rqlm3hxlik36r36kj3cc14y1wkcb8v5x")))
+  #:use-module (abbe build-system nix-rust)
+  #:use-module (guix git-download)
+  #:use-module ((guix licenses) #:prefix license:))
 
 (define-public mcfly
   (package
-   (name "mcfly")
-   (version "0.9.0")
-   (source (origin
-            (method url-fetch/tarbomb)
-            (uri (mcfly-url version (%current-system)))
-            (sha256 (base32 (mcfly-hash (%current-system))))))
-   (build-system binary-build-system)
-   (arguments
-    '(#:install-plan
-      '(("mcfly" "bin/mcfly"))))
-
-   (synopsis "Fly through your shell history")
-   (description "Fly through your shell history")
-   (home-page "https://github.com/cantino/mcfly")
-   (license expat)))
+    (name "mcfly")
+    (version "0.9.2")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/cantino/mcfly")
+                    (commit (string-append "v" version))))
+              (sha256 (base32 "0ak43skci7cviimgqpjmrh26ng3bsk5ia57vjcl88nnk3k5jh219"))))
+    (build-system nix-rust-build-system)
+    (arguments
+     `(#:vendor-hash "1xsi79wr4g1y1nkhhqhjjjczf5g2vvis657qgvc7kw1i10iqcn00"))
+    (synopsis "Fly through your shell history")
+    (description "Fly through your shell history")
+    (home-page "https://github.com/cantino/mcfly")
+    (license license:expat)))
