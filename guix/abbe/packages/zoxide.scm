@@ -2,45 +2,48 @@
   #:use-module (gnu packages)
   #:use-module (guix packages)
   #:use-module (guix gexp)
-  #:use-module (nonguix build-system binary)
-  #:use-module (guix download)
-  #:use-module (ice-9 match)
-  #:use-module (guix licenses))
-
-(define (zoxide-arch system)
-  (match system
-    ("aarch64-linux" "aarch64")
-    ("x86_64-linux" "x86_64")))
-
-(define (zoxide-url version system)
-  (let ([system (zoxide-arch system)])
-    (string-append
-     "https://github.com/ajeetdsouza/zoxide/releases/download/v" version "/zoxide-" version "-" system "-unknown-linux-musl.tar.gz")))
-
-(define (zoxide-hash system)
-  (match system
-    ("aarch64-linux" "0czil9gll1mgcwbkls1hwd2kf64mbrfmyl327jw3v3xmhyw97pv5")
-    ("x86_64-linux" "182m48gv7w271qynq4kb28hd042qd7nka7ihfdf9lbr5b88jrhpv")))
+  #:use-module (guix git-download)
+  #:use-module (abbe build-system nix-rust)
+  #:use-module ((guix licenses) #:prefix license:))
 
 (define-public zoxide
   (package
-   (name "zoxide")
-   (version "0.9.4")
-   (source (origin
-            (method url-fetch/tarbomb)
-            (uri (zoxide-url version (%current-system)))
-            (sha256 (base32 (zoxide-hash (%current-system))))))
-   (build-system binary-build-system)
-   (arguments
-    '(#:install-plan
-      '(("zoxide" "bin/zoxide")
-        ("man" "share/man")
-        ("completions/_zoxide" "share/zsh/site-functions/")
-        ("completions/zoxide.fish" "share/fish/vendor_completions.d/")
-        ("completions/zoxide.bash" "share/bash-completion/completions/"))))
+    (name "zoxide")
+    (version "0.9.6")
+    (source (origin
+              (method git-fetch)
+              (uri (git-reference
+                    (url "https://github.com/ajeetdsouza/zoxide")
+                    (commit (string-append "v" version))))
+              (sha256 (base32 "1p9dqszpc1jhinws5l4cgs8asbv2chiggkf32jldp2m5hcmvjw6x"))))
+    (build-system nix-rust-build-system)
+    (arguments
+     `(#:vendor-hash "012qrqn09bx99h8zlk265vq39m3jimk24wa4ypnx4cg6s0zzi9zf"
+       #:phases
+       (modify-phases %standard-phases
+         (add-after 'install 'install-manpages-et-al
+           (lambda* (#:key outputs #:allow-other-keys)
+             (let ((out (assoc-ref outputs "out"))
+                   (comps '(("_zoxide" . "share/zsh/site-functions")
+                            ("zoxide.fish" . "share/fish/vendor_completions.d")
+                            ("zoxide.bash" . "share/bash-completion/completions")
+                            ("zoxide.elv" . "share/elvish/lib"))))
 
-   (synopsis "A smarter cd command. Supports all major shells.")
-   (description "zoxide is a smarter cd command, inspired by z and autojump. It remembers which directories you use most frequently, so you can \"jump\" to them in just a few keystrokes. zoxide works on all major shells.
+               ;; install manpages
+               (for-each (lambda (file)
+                           (install-file file (string-append out "/share/man/man1")))
+                         (find-files "man/man1" "\\.1$"))
+
+
+               ;; install shell completions
+               (for-each (lambda (file)
+                           (install-file
+                            (string-append "contrib/completions/" (car file))
+                            (string-append out "/" (cdr file))))
+                         comps) ))))))
+
+    (synopsis "A smarter cd command. Supports all major shells.")
+    (description "zoxide is a smarter cd command, inspired by z and autojump. It remembers which directories you use most frequently, so you can \"jump\" to them in just a few keystrokes. zoxide works on all major shells.
 \"")
-   (home-page "https://github.com/ajeetdsouza/zoxide")
-   (license expat)))
+    (home-page "https://github.com/ajeetdsouza/zoxide")
+    (license license:expat)))
