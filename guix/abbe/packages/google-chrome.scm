@@ -2,5 +2,5 @@
                #:use-module ((nongnu packages chrome) #:select (make-google-chrome)))
 
 (define-public google-chrome-latest
-               (make-google-chrome "stable" "129.0.6668.70"
-                                   "0nzjzdg1g7myvj20va5h25ax8128p99j24lmkglns65igjy9zvh5"))
+               (make-google-chrome "stable" "129.0.6668.89"
+                                   "0p0v5vx29r0rndp1rfkdrssr6m04z7bbfvp6cwbixxxnhnq97j7f"))
