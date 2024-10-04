@@ -5,15 +5,20 @@
   #:export (%standard-phases
             nix-rust-build))
 
-(define* (configure #:key inputs rust-target cc env-vars parallel-build? #:allow-other-keys)
-  (let ((vendor (assoc-ref inputs "vendor"))
-        (source (assoc-ref inputs "source")))
+(define* (configure #:key name  inputs rust-target cc env-vars parallel-build? #:allow-other-keys)
+  (let* ((vendor (assoc-ref inputs "vendor"))
+         (source (assoc-ref inputs "source"))
+         (tmpdir (getenv "TMPDIR"))
+         (vendor-dest (string-append tmpdir "/cargo-vendor-" name)))
+
+    ;; use a symlink-ed copy otherwise it embeds references to /gnu/store/...-vendor
+    (symlink vendor vendor-dest)
 
     (mkdir-p ".cargo")
     (call-with-output-file ".cargo/config.toml"
       (lambda (cc-toml)
         (display "[source.cargo]\n" cc-toml)
-        (format cc-toml "directory = ~s\n" vendor)
+        (format cc-toml "directory = ~s\n" vendor-dest)
         (display "[source.crates-io]\n" cc-toml)
         (display "replace-with = 'cargo'\n" cc-toml)
         (format cc-toml "[target.~a]\n" rust-target)
@@ -21,7 +26,7 @@
 
     (setenv "CC" cc)
     (setenv "CARGO_HOME" (string-append (getenv "TMPDIR") "/.cargo"))
-    (setenv "CARGO_VENDOR_DIR" vendor)
+    (setenv "CARGO_VENDOR_DIR" vendor-dest)
     (setenv "CARGO_MANIFEST_DIR" source)
     (setenv "CARGO_BUILD_TARGET" rust-target)
     (setenv "RUST_BACKTRACE" "full")
