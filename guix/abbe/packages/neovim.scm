@@ -8,32 +8,13 @@
   #:use-module (nonguix build-system binary)
   #:use-module (gnu packages gcc)
   #:use-module (gnu packages base)
-  #:use-module (gnu packages tree-sitter))
-
-(define-public tree-sitter-0-22-6
-  (package
-    (inherit tree-sitter)
-    (name "tree-sitter")
-    (version "0.22.6")
-    (source (origin
-              (method git-fetch)
-              (uri (git-reference
-                    (url "https://github.com/tree-sitter/tree-sitter")
-                    (commit "b40f342067a89cd6331bf4c27407588320f3c263")))
-              (file-name (git-file-name name version))
-              (sha256
-               (base32
-                "0nx3kmvbhjf6nq1pv6x85z67dkk5kagh90w1cwxh0pvg7608l44c"))
-              (modules '((guix build utils)))
-              (snippet #~(begin
-                           ;; Remove bundled ICU parts
-                           (delete-file-recursively "lib/src/unicode")))))))
+  #:use-module (abbe packages tree-sitter))
 
 (define-public neovim-0-10
   (package
     (inherit neovim)
     (name "neovim")
-    (version "0.10.1")
+    (version "0.10.2")
     (source (origin
               (method git-fetch)
               (uri (git-reference
@@ -42,9 +23,9 @@
               (file-name (git-file-name name version))
               (sha256
                (base32
-                "1xmncdj6nxa45m0qk3wmnp7b5d0iqqapy1m2vqzv316rr2snxrg4"))))
+                "0r5mjfsgrllxi44i9k6lb8b99rpzrwhkg18aiqmby8wwzflbqdy3"))))
     (inputs (modify-inputs (package-inputs neovim)
-             (replace "tree-sitter" tree-sitter-0-22-6)))))
+             (replace "tree-sitter" tree-sitter)))))
 
 (define-public neovim-bin
   (package
