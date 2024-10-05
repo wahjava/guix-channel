@@ -4,13 +4,13 @@
   #:use-module (guix build utils)
   #:use-module (guix packages)
   #:use-module ((guix licenses) :prefix license:)
+  #:use-module (abbe packages openssl)
   #:use-module (guix build-system cmake)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages bdw-gc)
   #:use-module (gnu packages compression)
   #:use-module (gnu packages libffi)
-  #:use-module (gnu packages pkg-config)
-  #:use-module (gnu packages tls))
+  #:use-module (gnu packages pkg-config))
 
 (define-public sagittarius-scheme
   (package
@@ -26,7 +26,7 @@
 	(base32 "1iwkcdmq7h420jrwj74im6j8967vwh2m89y4r4516c1cdw8pb09c"))))
     (build-system cmake-build-system)
     (native-inputs (list pkg-config))
-    (inputs (list libgc zlib libffi openssl))
+    (inputs (list libgc zlib libffi openssl-3.3))
     (arguments
      (list
       #:phases

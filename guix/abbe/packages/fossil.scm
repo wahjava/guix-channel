@@ -6,6 +6,7 @@
   #:use-module (gnu packages sqlite)
   #:use-module (gnu packages ncurses)
   #:use-module (gnu packages compression)
+  #:use-module (abbe packages openssl)
   #:use-module (nonguix build-system binary)
   #:use-module (guix download)
   #:use-module (guix gexp)
@@ -55,7 +56,8 @@
                  "--enable-json"))))
 
     (inputs (modify-inputs (package-inputs fossil)
-             (delete "sqlite")))))
+              (replace "openssl" openssl-3.3)
+              (delete "sqlite")))))
 
 (define-public fossil-bin
   (package/inherit fossil

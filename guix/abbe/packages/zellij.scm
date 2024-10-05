@@ -4,7 +4,7 @@
   #:use-module (guix gexp)
   #:use-module (abbe build-system nix-rust)
   #:use-module (guix git-download)
-  #:use-module (gnu packages tls)
+  #:use-module (abbe packages openssl)
   #:use-module (gnu packages pkg-config)
   #:use-module ((guix licenses) #:prefix license:))
 
@@ -22,7 +22,7 @@
               (sha256 (base32 "0nbbwwi2v8lpy20y5886rh8zq6l4vjyjqbwvzvq38nwa4yq31iwz"))))
     (build-system nix-rust-build-system)
     (native-inputs (list pkg-config))
-    (inputs (list openssl))
+    (inputs (list openssl-3.3))
     (arguments
      `(#:vendor-hash "0588xq2fyd2ax3r3d0awv6lf0508jq3r6nivimb1c8gsp4jf9g68"
        #:env-vars

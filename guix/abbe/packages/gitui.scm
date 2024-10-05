@@ -5,7 +5,7 @@
   #:use-module (guix utils)
   #:use-module (abbe build-system nix-rust)
   #:use-module (guix git-download)
-  #:use-module (gnu packages tls)
+  #:use-module (abbe packages openssl)
   #:use-module (gnu packages ssh)
 ;  #:use-module (guix build-utils)
   #:use-module (gnu packages pkg-config)
@@ -21,7 +21,7 @@
                   (url "https://github.com/extrawurst/gitui")
                   (commit (string-append "v" version))))
             (sha256 (base32 "0afshcj1zspkn4sa92danm9z1ssx7vgnry37l9vdm8xy60mbwz4g"))))
-   (inputs (list openssl libssh2))
+   (inputs (list openssl-3.3 libssh2))
    (native-inputs
      (list (list "pkg-config" pkg-config)))
    (build-system nix-rust-build-system)

@@ -4,7 +4,7 @@
   #:use-module (guix git-download)
   #:use-module (guix gexp)
   #:use-module (abbe build-system nix-rust)
-  #:use-module (gnu packages tls)
+  #:use-module (abbe packages openssl)
   #:use-module (gnu packages pkg-config)
   #:use-module ((guix licenses) #:prefix license:))
 
@@ -24,7 +24,7 @@
        #:env-vars
        (list '("OPENSSL_NO_VENDOR" . "yes")
              '("VERGEN_GIT_SHA" . "2e6376ff866a17eb4727af039b6a8e801da252e2"))))
-    (inputs (list openssl))
+    (inputs (list openssl-3.3))
     (native-inputs
      (list (list "pkg-config" pkg-config)))
     (synopsis "A terminal-based client for Matrix for the Vim addict.")
