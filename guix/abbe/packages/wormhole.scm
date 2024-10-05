@@ -1,13 +1,11 @@
 (define-module (abbe packages wormhole)
   #:use-module (guix packages)
   #:use-module (guix gexp)
-  #:use-module (abbe packages go)
   #:use-module (guix build utils)
   #:use-module (abbe build-system nix-go)
   #:use-module (abbe build-system nix-rust)
   #:use-module (guix git-download)
-  #:use-module ((guix licenses) :prefix license:)
-  #:use-module (ice-9 match))
+  #:use-module ((guix licenses) :prefix license:))
 
 (define-public magic-wormhole-rs
   (package
