@@ -24,7 +24,7 @@
        #:phases
        (modify-phases %standard-phases
          (add-after 'install 'install-manpages
-           (lambda* (#:key outputs :#allow-other-keys)
+           (lambda* (#:key outputs #:allow-other-keys)
              (let ((out (assoc-ref outputs "out")))
                (install-file "wormhole.1"
                              (string-append out "/share/man/man1"))))))))
