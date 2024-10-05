@@ -278,6 +278,10 @@
     (with-imported-modules imported-modules
       #~(begin
           (use-modules #$@(sexp->gexp modules))
+
+          (define %outputs
+            #$(outputs->gexp outputs))
+
           (nix-rust-build #:name #$name
                           #:source #+source
                           #:system #$system
