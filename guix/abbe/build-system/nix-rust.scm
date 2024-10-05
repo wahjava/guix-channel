@@ -279,29 +279,27 @@
       #~(begin
           (use-modules #$@(sexp->gexp modules))
 
-          (define %outputs
-            #$(outputs->gexp outputs))
-
-          (nix-rust-build #:name #$name
-                          #:source #+source
-                          #:system #$system
-                          #:phases #$phases
-                          #:outputs #$(outputs->gexp outputs)
-                          #:substitutable? #$substitutable?
-                          #:search-paths '#$(sexp->gexp
-                                           (map search-path-specification->sexp
-                                                search-paths))
-                          #:install-source? #$install-source?
-                          #:build-flags (list #$@build-flags)
-                          #:tests? #$tests?
-                          #:parallel-build? #$parallel-build?
-                          #:parallel-tests? #$parallel-tests?
-                          #:rust-target #$(nix-system->gnu-triplet (%current-system))
-                          #:cc #$(cc-for-target)
-                          #:cargo-install-paths (list #$@cargo-install-paths)
-                          #:env-vars #$env-vars
-                          #:inputs #$(input-tuples->gexp inputs)))))
-
+          #$(with-build-variables inputs outputs
+              #~(nix-rust-build #:name #$name
+                                #:source #+source
+                                #:system #$system
+                                #:phases #$phases
+                                #:outputs #$(outputs->gexp outputs)
+                                #:substitutable? #$substitutable?
+                                #:search-paths '#$(sexp->gexp
+                                                   (map search-path-specification->sexp
+                                                        search-paths))
+                                #:install-source? #$install-source?
+                                #:build-flags (list #$@build-flags)
+                                #:tests? #$tests?
+                                #:parallel-build? #$parallel-build?
+                                #:parallel-tests? #$parallel-tests?
+                                #:rust-target #$(nix-system->gnu-triplet (%current-system))
+                                #:cc #$(cc-for-target)
+                                #:cargo-install-paths (list #$@cargo-install-paths)
+                                #:env-vars #$env-vars
+                                #:inputs #$(input-tuples->gexp inputs))))))
+  
   (mlet %store-monad ((guile (package->derivation (or guile (default-guile))
                                                   system #:graft? #f)))
     (gexp->derivation name builder
