@@ -2,14 +2,11 @@
   #:use-module (guix packages)
   #:use-module (guix gexp)
   #:use-module (guix build utils)
-  #:use-module (abbe build-system nix-go)
   #:use-module (abbe build-system nix-rust)
   #:use-module (guix git-download)
   #:use-module (gnu packages pkg-config)
   #:use-module (gnu packages linux)
   #:use-module ((guix licenses) :prefix license:))
-
-(define %empty-hash (make-string 52 #\0))
 
 (define-public sudo-rs
   (package
