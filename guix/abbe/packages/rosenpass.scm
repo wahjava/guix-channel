@@ -9,6 +9,7 @@
   #:use-module (gnu packages llvm)
   #:use-module (gnu packages cmake)
   #:use-module (gnu packages gawk)
+  #:use-module (gnu packages vpn)
   #:use-module ((guix licenses) :prefix license:))
 
 (define-public rosenpass
@@ -24,7 +25,7 @@
     (build-system nix-rust-build-system)
     (native-inputs (list pkg-config cmake))
     (inputs (list libsodium clang))
-    (propagated-inputs (list gawk))
+    (propagated-inputs (list gawk wireguard-tools))
     (arguments
      `(#:vendor-hash "1skvkrygk9xay1f0qkljirdwxymjg11hz1xzqv6c33vlckxapakg"
        #:cargo-install-paths ("./rosenpass")
