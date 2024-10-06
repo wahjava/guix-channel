@@ -33,25 +33,25 @@
     (%upstream-linux-source (version-major+minor version) kernel-hash))
 
   (define bore-patches
-    (let ((linux-xanmod-bore-base-url "https://raw.githubusercontent.com/micros24/linux-xanmod-bore/refs/heads/6.10/"))
+    (let ((linux-xanmod-bore-base-url "https://raw.githubusercontent.com/micros24/linux-xanmod-bore/refs/heads/6.11/"))
       (if (not bore) (list)
         (list (origin
                 (method url-fetch)
                 (uri (string-append linux-xanmod-bore-base-url "0001-bore.patch"))
-                (file-name "linux6.10.y-bore5.2.11.patch")
-                (sha256 (base32 "1wfw5yypn5hc3yiq2qmqan5h5zpr4yspzz7hf282q2d437rm3ns9")))
+                (file-name "linux-xanmod-bore-0001-bore.patch")
+                (sha256 (base32 "15fm2hk0ikjdvyinrm5j1yf4cvdq1fhs4nhxkzvv6303nlr83m91")))
 
               (origin
                 (method url-fetch)
                 (uri (string-append linux-xanmod-bore-base-url "0002-glitched-cfs.patch"))
-                (file-name "glitched-cfs.patch")
+                (file-name "linux-xanmod-bore-0002-glitched-cfs.patch")
                 (sha256 (base32 "0wl86q7bnjar771zp34v6f7qzw2hpbv7aiya6p66y5a23375hchz")))
 
               (origin
                 (method url-fetch)
                 (uri (string-append linux-xanmod-bore-base-url "0003-glitched-eevdf-additions.patch"))
-                (file-name "glitched-eevdf-additions.patch")
-                (sha256 (base32 "16brb10kxr35siq93jjjgv8v68scnmkn2brpldn2g8fbzkk0ixbq")))))))
+                (file-name "linux-xanmod-bore-0003-glitched-eevdf-additions.patch")
+                (sha256 (base32 "0yq5sghbrv58zchsq315a3680ccr3i8mw2m0wc4ghsr63pd3yp4g")))))))
 
   (define xanmod-patch
     (origin
@@ -170,7 +170,7 @@ distribution with custom settings and new features.  It's built to provide a
 stable, responsive and smooth desktop experience.")))
 
 ;; Linux-XanMod sources
-(define-public linux-xanmod-ng-version "6.10.12")
+(define-public linux-xanmod-ng-version "6.11.2")
 (define-public linux-xanmod-ng-revision "xanmod1")
 (define-public linux-xanmod-ng-source
   (make-linux-xanmod-source
@@ -178,19 +178,8 @@ stable, responsive and smooth desktop experience.")))
    linux-xanmod-ng-revision
    #:xanmod-branch "main"
    #:bore #t
-   #:kernel-hash (base32 "09p2z3z8c3aq6ipqdc58x6s52sy0cmyg6mj4f0g5yk755r19hikp")
-   #:xanmod-hash (base32 "0ppcc0f394g1ph67v0f6a8g8lwc3g497cki3q610318ma8wdn1p2")))
-
-(define-public linux-xanmod-ng2-version "6.11.1")
-(define-public linux-xanmod-ng2-revision "xanmod1")
-(define-public linux-xanmod-ng2-source
-  (make-linux-xanmod-source
-   linux-xanmod-ng2-version
-   linux-xanmod-ng2-revision
-   #:xanmod-branch "edge"
-   #:bore #f
    #:kernel-hash (base32 "0bnbvadm4wvnwzcq319gsgl03ijvvljn7mj8qw87ihpb4p0cdljm")
-   #:xanmod-hash (base32 "1c2x7rjgfpn32j45yysda2gp1dds4nqps2kvag2ai54gdab87x3k")))
+   #:xanmod-hash (base32 "1v36vqz8q3p493gk0p3pz3rnw5agzrnxznhih8wz6wxgw5jywna8")))
 
 ;; Linux-XanMod packages
 (define-public linux-xanmod-ng-v3
@@ -207,28 +196,13 @@ stable, responsive and smooth desktop experience.")))
                      #:name "linux-xanmod-ng"
                      #:xanmod-defconfig "config_x86-64-v4"))
 
-(define-public linux-xanmod-ng2-v3
-  (make-linux-xanmod linux-xanmod-ng2-version
-                     linux-xanmod-ng2-revision
-                     linux-xanmod-ng2-source
-                     #:name "linux-xanmod-ng"
-                     #:xanmod-defconfig "config_x86-64-v3"))
-
-(define-public linux-xanmod-ng2-v4
-  (make-linux-xanmod linux-xanmod-ng2-version
-                     linux-xanmod-ng2-revision
-                     linux-xanmod-ng2-source
-                     #:name "linux-xanmod-ng"
-                     #:xanmod-defconfig "config_x86-64-v4"))
-
-
 (define-public lkm-tuxedo-keyboard-xanmod-ng
    (package/inherit
     tuxedo-keyboard
     (arguments
      (substitute-keyword-arguments (package-arguments tuxedo-keyboard)
-       ((#:linux original-linux linux-xanmod-ng2-v3)
-        linux-xanmod-ng2-v3)))))
+       ((#:linux original-linux linux-xanmod-ng-v3)
+        linux-xanmod-ng-v3)))))
 
 (define ddcci-driver-linux-patched
   (let ((fix-611-patch
@@ -251,16 +225,16 @@ stable, responsive and smooth desktop experience.")))
    ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng2-v3)
-       linux-xanmod-ng2-v3)))))
+      ((#:linux original-linux linux-xanmod-ng-v3)
+       linux-xanmod-ng-v3)))))
 
 (define-public ddcci-xanmod-ng-v4
   (package/inherit
    ddcci-driver-linux-patched
    (arguments
     (substitute-keyword-arguments (package-arguments ddcci-driver-linux)
-      ((#:linux original-linux linux-xanmod-ng2-v4)
-       linux-xanmod-ng2-v4)))))
+      ((#:linux original-linux linux-xanmod-ng-v4)
+       linux-xanmod-ng-v4)))))
 
 (define-public bpftool-xanmod-ng
                (package/inherit bpftool
@@ -272,17 +246,12 @@ stable, responsive and smooth desktop experience.")))
                                 (source  (package-source linux-xanmod-ng-v4))
                                 (version (package-version linux-xanmod-ng-v4))))
 
-(define-public bpftool-xanmod-ng2-v4
-               (package/inherit bpftool
-                                (source  (package-source linux-xanmod-ng2-v4))
-                                (version (package-version linux-xanmod-ng2-v4))))
-
 (define-public zfs-xanmod-ng
   (package/inherit zfs
     (arguments
      (substitute-keyword-arguments (package-arguments zfs)
-       ((#:linux original-linux linux-xanmod-ng2-v4)
-        linux-xanmod-ng2-v4)))))
+       ((#:linux original-linux linux-xanmod-ng-v4)
+        linux-xanmod-ng-v4)))))
 
 (define-public zfs-auto-snapshot-xanmod-ng
    (package/inherit
